@@ -1,9 +1,8 @@
 ---
-version: "2.0.12"
+version: "2.0.13"
 name: Simple Scheduler
 description: Simple timer on weekly base
 slug: simplescheduler
-apparmor: false
 url: https://github.com/arthurdent75/SimpleScheduler
 codenotary: notary@home-assistant.io
 arch:

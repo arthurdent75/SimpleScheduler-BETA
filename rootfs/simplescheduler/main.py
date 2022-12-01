@@ -13,6 +13,7 @@ from slugify import slugify
 import requests
 import re
 import psutil
+import subprocess
 
 import simpleschedulerconf
 
@@ -709,6 +710,9 @@ if __name__ == '__main__':
     log = logging.getLogger('werkzeug')
     log.disabled = True
     flask.cli.show_server_banner = lambda *args: None
+    
+    schedulerpath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "scheduler.py")
+    subprocess.Popen(["python3",schedulerpath ])
 
     printlog('STATUS: Starting WebServer')
     app.run(host='0.0.0.0', port=8099, debug=False)
