@@ -4,7 +4,6 @@
 # Runs the scheduler daemon
 # ==============================================================================
 
-bashio::log.info "Starting scheduler daemon"
-cd /simplescheduler
-chmod 777 *.py
-exec /usr/local/bin/python3 ./scheduler.py
+#bashio::log.info "Starting scheduler daemon"
+
+#exec /usr/local/bin/python3 ./scheduler.py

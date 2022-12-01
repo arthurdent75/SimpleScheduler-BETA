@@ -1,9 +1,14 @@
 #!/command/with-contenv bashio
 # ==============================================================================
 # Home Assistant Add-on: SimpleScheduler
-# Runs the inteface daemon
+# Configures requirements
 # ==============================================================================
 
-#bashio::log.info "Starting main daemon"
+python3 /simplescheduler/main.py &
+python3 /simplescheduler/scheduler.py &
 
-#exec python3 /simplescheduler/main.py
+
+	
+
+
+
