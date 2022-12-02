@@ -4,21 +4,17 @@ import flask.cli
 import logging
 import glob
 import os
-import time
 import json
 import uuid
 from datetime import datetime, timedelta
 import pytz
-from slugify import slugify
 import requests
 import re
 import psutil
-import subprocess
 
 import simpleschedulerconf
 
 lwt_topic = "homeassistant/switch/simplescheduler/availability"
-logfile = "/share/simplescheduler/scheduler.log"
 sun_data = ""
 schedulers_list = []
 options = []
@@ -55,25 +51,25 @@ def webserver_new():
 @app.route('/delete', methods=['GET'])
 def webserver_delete():
     args = request.args
-    id = args.get('id')
-    file = simpleschedulerconf.json_folder + id + '.json'
+    sid = args.get('id')
+    file = simpleschedulerconf.json_folder + sid + '.json'
     os.remove(file)
     if options['MQTT']['enabled']:
-        mqttclient.publish('homeassistant/switch/simplescheduler/' + id + '/config', "", qos=0, retain=1)
+        mqttclient.publish('homeassistant/switch/simplescheduler/' + sid + '/config', "", qos=0, retain=1)
     return redirect("main")
 
 
 @app.route('/edit', methods=['GET'])
 def webserver_edit():
     args = request.args
-    id = args.get('id')
-    type: str = args.get('type')
-    file = simpleschedulerconf.json_folder + id + '.json'
-    if id != "0":
+    sid = args.get('id')
+    stype: str = args.get('type')
+    file = simpleschedulerconf.json_folder + sid + '.json'
+    if sid != "0":
         with open(file, "r") as read_file:
             param = json.load(read_file)
     else:
-        param = json.loads(get_json_template(type))
+        param = json.loads(get_json_template(stype))
         param['id'] = uuid.uuid4().hex
 
     return render_template('edit.html',
@@ -86,7 +82,7 @@ def webserver_edit():
 
 @app.route("/update", methods=['POST'])
 def webserver_update():
-    id = request.form.get('id')
+    sid = request.form.get('id')
     enabled = request.form.get("enabled")
     name = request.form.get("name")
     entity_id = request.form.getlist('entity_id[]')
@@ -102,8 +98,8 @@ def webserver_update():
             off_dow += o
 
     data = json.loads(get_json_template(type))
-    data['id'] = id
-    data['name'] = name if name else id
+    data['id'] = sid
+    data['name'] = name if name else sid
     data['enabled'] = enabled if enabled else 0
     data['entity_id'] = entity_id
     if type == 'weekly':
@@ -137,11 +133,11 @@ def webserver_update():
         data['off_tod'] = off_tod
         data['on_dow'] = on_dow
         data['off_dow'] = off_dow
-    file = simpleschedulerconf.json_folder + id + '.json'
+    file = simpleschedulerconf.json_folder + sid + '.json'
     with open(file, 'w') as jsonFile:
         json.dump(data, jsonFile)
     if options['MQTT']['enabled']:
-        send_mqtt_config(mqttclient)
+        mqtt_send_config(mqttclient)
         # mqtt_publish_state(mqttclient, id, enabled, True)
     return redirect("main")
 
@@ -234,13 +230,13 @@ def on_message(client, userdata, msg):
     pieces = msg.topic.split("/")
     if len(pieces) > 4:
         if pieces[4] == "set":
-            id = pieces[3]
+            sid = pieces[3]
             printlog('MQTT: RCV ' + msg.topic + " --> " + msg.payload.decode())
             if msg.payload.decode() == 'ON':
                 payload = 1
-            update_json_file(id, 'enabled', payload)
+            update_json_file(sid, 'enabled', payload)
             if options['MQTT']['enabled']:
-                mqtt_publish_state(client, id, payload, True)
+                mqtt_publish_state(client, sid, payload, True)
                 has_changed = "1"
 
 
@@ -288,9 +284,6 @@ def get_switch_list(domains):
 
             if item["domain"] in domains:
                 full_switch_list.append(item)
-
-            if item["domain"] == 'sun':
-                sun_data = attributes
 
         full_switch_list.sort(key=lambda x: x["id"], reverse=False)
     except:
@@ -348,10 +341,10 @@ def mqtt_publish_state(client, object_id, pub_value, echo=False):
         printlog('MQTT: PUB ' + topic + ' --> ' + payload)
 
 
-def send_mqtt_config(client):
+def mqtt_send_config(client):
     schedulers = load_json_schedulers()
     payload_template = '{"unique_id": "simplescheduler_###",' \
-                       '"name": "Scheduler: @@@" ,' \
+                       '"name": "SimpleScheduler: @@@" ,' \
                        '"icon":"mdi:calendar-clock" ,' \
                        '"cmd_t": "homeassistant/switch/simplescheduler/###/set",' \
                        '"stat_t": "homeassistant/switch/simplescheduler/###/state",' \
@@ -377,13 +370,14 @@ def get_options():
     if not os.path.exists(path):
         path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "options.dat")
     with open(path, "r", encoding='utf-8') as read_file:
-        options = json.load(read_file)
-    return options
+        opt = json.load(read_file)
+    return opt
+
 
 def get_css():
     global options
-    path_light = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates","light.css")
-    path_dark = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates","dark.css")
+    path_light = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates", "light.css")
+    path_dark = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates", "dark.css")
     css = ""
     # try:
     with open(path_light, "r", encoding='utf-8') as css_file:
@@ -395,11 +389,12 @@ def get_css():
     #     printlog("ERROR: Something went wrong while loading CSS")
     return css
 
+
 def get_enabled_domains():
     enabled_domains = []
-    options = get_options()
-    for d in options['components']:
-        if (options['components'][d]):
+    opt = get_options()
+    for d in opt['components']:
+        if opt['components'][d]:
             enabled_domains.append(d)
     return enabled_domains
 
@@ -425,11 +420,16 @@ def get_json_template(t: str):
     t = t.lower()
     json_template: str = ''
     if t == 'w' or t == 'weekly':
-        json_template = '{"id":"","name":"","enabled":"1","entity_id":[""],"weekly":{"on_1":"","on_2":"","on_3":"","on_4":"","on_5":"","on_6":"","on_7":"","off_1":"","off_2":"","off_3":"","off_4":"","off_5":"","off_6":"","off_7":""}}'
+        json_template = '{"id":"","name":"","enabled":"1","entity_id":[""],"weekly":{"on_1":"","on_2":"","on_3":"",' \
+                        '"on_4":"","on_5":"","on_6":"","on_7":"","off_1":"","off_2":"","off_3":"","off_4":"",' \
+                        '"off_5":"","off_6":"","off_7":""}} '
     if t == 'd' or t == 'daily' or t is None:
-        json_template = '{"id":"","name":"","enabled":"1","entity_id":[""],"on_tod":"","on_dow":"","off_tod":"","off_dow":""}'
+        json_template = '{"id":"","name":"","enabled":"1","entity_id":[""],"on_tod":"","on_dow":"","off_tod":"",' \
+                        '"off_dow":""} '
     if t == 'r' or t == 'recurring':
-        json_template = '{"id":"","name":"","enabled":"1","entity_id":[""],"recurring":{"on_start":"","on_end":"","on_interval":"","off_start":"","off_end":"","off_interval":""},"on_tod":"","on_dow":"","off_tod":"","off_dow":""}'
+        json_template = '{"id":"","name":"","enabled":"1","entity_id":[""],"recurring":{"on_start":"","on_end":"",' \
+                        '"on_interval":"","off_start":"","off_end":"","off_interval":""},"on_tod":"","on_dow":"",' \
+                        '"off_tod":"","off_dow":""} '
 
     return json_template
 
@@ -441,8 +441,8 @@ def get_sort_list():
         with open(sort_file_path, "r") as sort_file:
             order = json.load(sort_file)
         i = 0
-        for id in order['id_order']:
-            sorting[id] = i
+        for sid in order['id_order']:
+            sorting[sid] = i
             i = i + 1
     return sorting
 
@@ -486,12 +486,12 @@ def get_entity_status(e, check):
 
 
 def call_ha_api(command_url: str, post_data: str):
-    options = get_options()
+    opt = get_options()
     headers = {'content-type': 'application/json', 'Authorization': 'Bearer ' + simpleschedulerconf.SUPERVISOR_TOKEN}
     try:
         r = requests.post(url=command_url, data=post_data, headers=headers, timeout=request_timeout)
         command = command_url.replace(simpleschedulerconf.HASSIO_URL + "/services/", "")
-        if options['debug']: printlog("DEBUG: %s %s" % (command, post_data))
+        if opt['debug']: printlog("DEBUG: %s %s" % (command, post_data))
         if r.status_code != 200:
             printlog("ERROR:  Error calling HA API " + str(r.status_code))
     except:
@@ -499,12 +499,13 @@ def call_ha_api(command_url: str, post_data: str):
     return True
 
 
-def call_ha(eid_list, action, passedvalue, friendly_name ):
+def call_ha(eid_list, action, passedvalue, friendly_name):
     if not isinstance(eid_list, list):
         eid_list = {eid_list}
     for eid in eid_list:
-        command="Turning " + action.upper()
-        extra=""
+        command = "Turning " + action.upper()
+        extra = ""
+        v = ""
         value = passedvalue.upper()
         domain = eid.split(".")
         command_url = simpleschedulerconf.HASSIO_URL + "/services/" + domain[0] + "/turn_" + action
@@ -548,7 +549,7 @@ def call_ha(eid_list, action, passedvalue, friendly_name ):
                 command_url = simpleschedulerconf.HASSIO_URL + "/services/cover/close_cover"
                 command = "Closing"
 
-        printlog("SCHED: %s [%s] %s" % (command, friendly_name.get(eid, eid), extra) )
+        printlog("SCHED: %s [%s] %s" % (command, friendly_name.get(eid, eid), extra))
         call_ha_api(command_url, postdata)
 
         if domain[0] == "climate" and value != "":
@@ -703,16 +704,13 @@ if __name__ == '__main__':
             printlog("ERROR: MQTT Connection failed")
         else:
             mqttclient.loop_start()
-            send_mqtt_config(mqttclient)
+            mqtt_send_config(mqttclient)
 
     # Disable Flask Messages
     app.logger.disabled = True
     log = logging.getLogger('werkzeug')
     log.disabled = True
     flask.cli.show_server_banner = lambda *args: None
-    
-    schedulerpath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "scheduler.py")
-    subprocess.Popen(["python3",schedulerpath ])
 
     printlog('STATUS: Starting WebServer')
     app.run(host='0.0.0.0', port=8099, debug=False)

@@ -1,0 +1,10 @@
+#!/command/with-contenv bashio
+# ==============================================================================
+#  
+# Home Assistant Add-on: SimpleScheduler
+#  
+# ==============================================================================
+
+bashio::log.info "Running scheduler.sh"
+
+python3 /usr/bin/scheduler.py
