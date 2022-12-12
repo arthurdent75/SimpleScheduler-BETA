@@ -1,24 +1,19 @@
 ARG BUILD_FROM
 FROM ${BUILD_FROM}
 
-# Copy root filesystem
-COPY rootfs /
 
-RUN apk update && apk upgrade --no-cache
+RUN apt-get update -y && apt upgrade -y
 
 # Setup base
-RUN apk add --no-cache \
-	build-base \
-	linux-headers \
+RUN apt-get install -y \
     coreutils \
     wget \
 	curl \
-	gcc \
-	libc-dev \
 	python3 \
 	python3-dev \ 
-	py-pip 
+	python3-pip
 	
 RUN pip3 install Flask requests paho-mqtt pytz psutil
 
-
+# Copy root filesystem
+COPY rootfs /
