@@ -1,10 +1,10 @@
 ---
 build_from:
-  aarch64: "ghcr.io/hassio-addons/aarch64-base:13.0.0"
-  amd64: "ghcr.io/hassio-addons/amd64-base:13.0.0"
-  armhf: "ghcr.io/hassio-addons/armhf-base:13.0.0"
-  armv7: "ghcr.io/hassio-addons/armv7-base:13.0.0"
-  i386: "ghcr.io/hassio-addons/i386-base:13.0.0"
+  aarch64: ghcr.io/hassio-addons/base:12.2.6
+  amd64: ghcr.io/hassio-addons/base:12.2.6
+  armhf: ghcr.io/hassio-addons/base:12.2.6
+  armv7: ghcr.io/hassio-addons/base:12.2.6
+  i386: ghcr.io/hassio-addons/base:12.2.6
 codenotary:
-  base_image: codenotary@frenck.dev
-  signer: codenotary@frenck.dev
+  base_image: notary@home-assistant.io
+  signer: notary@home-assistant.io
