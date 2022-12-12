@@ -17,3 +17,5 @@ RUN pip3 install Flask requests paho-mqtt pytz psutil
 
 # Copy root filesystem
 COPY rootfs /
+
+RUN chmod -R 777 /etc/services.d/*
