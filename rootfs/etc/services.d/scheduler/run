@@ -7,5 +7,5 @@
 
 bashio::log.info "Starting service.d [Scheduler]"
 
-#exec /simplescheduler/scheduler.sh
-exec python3 /simplescheduler/scheduler.py
+exec /simplescheduler/scheduler.sh
+

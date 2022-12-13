@@ -7,5 +7,5 @@
 
 bashio::log.info "Starting service.d [Interface]"
 
-# exec /simplescheduler/interface.sh
-exec python3 /simplescheduler/main.py
+exec /simplescheduler/interface.sh
+
