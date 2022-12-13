@@ -1,7 +1,7 @@
 ARG BUILD_FROM
 FROM ${BUILD_FROM}
 
-
+# Update packages
 RUN apt-get update -y && apt upgrade -y
 
 # Setup base
@@ -12,10 +12,10 @@ RUN apt-get install -y \
 	python3 \
 	python3-dev \ 
 	python3-pip
-	
+
+# Setup python modules	
 RUN pip3 install Flask requests paho-mqtt pytz psutil
 
 # Copy root filesystem
 COPY rootfs /
 
-RUN chmod -R 777 /etc/services.d/*
