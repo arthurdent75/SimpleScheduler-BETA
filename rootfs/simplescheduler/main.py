@@ -53,7 +53,8 @@ def webserver_delete():
     args = request.args
     sid = args.get('id')
     file = simpleschedulerconf.json_folder + sid + '.json'
-    os.remove(file)
+    if os.path.exists(file):
+        os.remove(file)
     if options['MQTT']['enabled']:
         mqttclient.publish('homeassistant/switch/simplescheduler/' + sid + '/config', "", qos=0, retain=1)
     return redirect("main")
@@ -148,6 +149,13 @@ def webserver_sort():
     save_sort_list(data)
     return make_response("", 200)
 
+@app.route("/log", methods=['GET'])
+def webserver_log():
+    response = ""
+    logfilepath = os.path.join(simpleschedulerconf.json_folder, "simplescheduler.log")
+    with open(logfilepath, "r", encoding='utf-8') as logfile:
+        response += logfile.read()
+    return make_response(response, 200)
 
 @app.route("/dirty")
 def webserver_dirty():

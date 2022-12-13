@@ -165,8 +165,62 @@
 		margin-left: 1em;
 	}
 
-	.statusbar_span {margin-right: 2em;}
-	
+	.statusbar_span {margin-right: 2em; }
+    .statusbar_span .mdi {font-size:1.2em; }
+
+    #showlog {cursor:pointer;}
+
+    #log_wrapper {
+        z-index: 9999;
+        display: none;
+        position: fixed;
+        top: 10%;
+        left: 10%;
+        width: 80%;
+        height: 80%;
+        background-color: white;
+        padding: 0;
+        margin: 0;
+        border: 1px solid #ccc;
+        overflow: hidden;
+        box-shadow: 5px 5px 15px 0px #777;
+    }
+
+    #log_wrapper > div {
+        position: relative;
+        width: 98%;
+        height: 96%;
+        margin: 1%;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    #logcontent {
+        font-size: 1em;
+        overflow: scroll;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    #closelog {
+        position: absolute;
+        top: 1em;
+        right: 3em;
+    }
+
+    #block_background {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        height: 0;
+        width: 0;
+        background-color: #77777700;
+        z-index: 9998;
+        transition: background-color 0.25s;
+    }
+
 	.week_table {
 		display: none;
 		width: 100%;
@@ -203,15 +257,15 @@
 	}
 	
 	.img-add-new {
-    display: block;
-    width: 90%;
-    margin: 1em auto;
-    height: auto;
-    min-height: 3em;
-    box-shadow: 2px 2px 5px -2px #777;
-    cursor: pointer;
-    line-height: 3em;
-    padding: 0em 1em;
+        display: block;
+        width: 90%;
+        margin: 1em auto;
+        height: auto;
+        min-height: 3em;
+        box-shadow: 2px 2px 5px -2px #777;
+        cursor: pointer;
+        line-height: 3em;
+        padding: 0em 1em;
 	}
 
 	.img-add-new > SPAN {

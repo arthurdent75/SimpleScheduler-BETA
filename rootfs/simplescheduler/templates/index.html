@@ -2,10 +2,10 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Home Assistant Simple Scheduler</title>
+<title>Simple Scheduler for HA</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" >
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css" >
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 	<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
@@ -25,152 +25,159 @@
 <body>
 
 <div class="wrapper">
+		<nav id="sidebar">
+			<button type="button" aria-label="Close" class="btn btn-outline-secondary btn-sm" onclick="toggle_sidebar();">>>></button>
 
-    <nav id="sidebar">
-		<button type="button" aria-label="Close" class="btn btn-outline-secondary btn-sm" onclick="toggle_sidebar();">>>></button>
+			<div id="sidebar-wrapper">
+				...
+			</div>
+		</nav>
 
-        <div id="sidebar-wrapper">
-            ...
-        </div>
-    </nav>
+		<div class="content" >
+			<div>
+				<table class="table table-hover" id="dtable">
+					<thead class="bg-primary">
+					<tr>
+					  <th scope="col" colspan="4" ><h5>SimpleScheduler</H5></th>
+					</tr>
+					</thead>
+					<tbody>
 
-	<div class="content">
-		<div>
-			<table class="table table-hover" id="dtable">
-				<thead class="bg-primary">
-				<tr>
-				  <th scope="col" colspan="4" ><h5>SimpleScheduler</H5></th>
-				</tr>
-				</thead>
-				<tbody>
+					{% for s in data %}
 
-				{% for s in data %}
-
-					  <tr data-value="{{ s.id }}" data-order="{{ sort[s.id] }}" style="opacity: {{ '1' if s.enabled else '0.3' }}">
-						  {% if s.weekly %}
-						  <td class="text-center drag_icon fit"> <span class="mdi mdi-calendar-range mdi-24px" ></span> </td>
-						  {% elif s.recurring %}
-						  <td class="text-center drag_icon fit"><span class="mdi mdi-calendar-refresh mdi-24px" ></span></td>
-						  {% else %}
-						  <td class="text-center drag_icon fit"><span class="mdi mdi-calendar-week mdi-24px" ></span></td>
-						  {% endif %}
-						  <td class="text-center fit" >
-							<button type="button" class="btn btn-default bg-primary edit-button" aria-id="{{ s.id }}" ><span class="mdi mdi-pencil" ></span></button>
-							&nbsp;
-							<button type="button" class="btn btn-default bg-primary view-button" aria-id="{{ s.id }}" ><span class="mdi mdi-eye" ></span></button>
-						  </td>
-						  <td  class="name_col" >
-							<div class="row-title"><p data-bs-toggle="tooltip" data-bs-html="true"  title="{{ s.id }}" >{{ s.name }}</p></div>
-							<div class="entities_list">
-							{% for e in s.entity_id %}
-								<span class="badge bg-primary" data-bs-toggle="tooltip" data-bs-html="true"  title="{{ e }}" >{{ friendlynames[e] }}</span>
-							{% endfor %}
-							</div>
-						  </td>
-						  {% if s.weekly %}
-						  <td>
-							<div class="week_table w_mode" id="detail_{{ s.id }}">
-								<div class="week_table_row week_table_header">
-									<div class="week_table_cell"></div>
-									{% for wd in range(1, 8): %}
-										   <div class="week_table_cell" style="width: 13.5%;" >
-										   {{ weekday[wd] }}
-										   </div>
-									{% endfor%}
+						  <tr data-value="{{ s.id }}" data-order="{{ sort[s.id] }}" style="opacity: {{ '1' if s.enabled else '0.3' }}">
+							  {% if s.weekly %}
+							  <td class="text-center drag_icon fit"> <span class="mdi mdi-calendar-range mdi-24px" ></span> </td>
+							  {% elif s.recurring %}
+							  <td class="text-center drag_icon fit"><span class="mdi mdi-calendar-refresh mdi-24px" ></span></td>
+							  {% else %}
+							  <td class="text-center drag_icon fit"><span class="mdi mdi-calendar-week mdi-24px" ></span></td>
+							  {% endif %}
+							  <td class="text-center fit" >
+								<button type="button" class="btn btn-default bg-primary edit-button" aria-id="{{ s.id }}" ><span class="mdi mdi-pencil" ></span></button>
+								&nbsp;
+								<button type="button" class="btn btn-default bg-primary view-button" aria-id="{{ s.id }}" ><span class="mdi mdi-eye" ></span></button>
+							  </td>
+							  <td  class="name_col" >
+								<div class="row-title"><p data-bs-toggle="tooltip" data-bs-html="true"  title="{{ s.id }}" >{{ s.name }}</p></div>
+								<div class="entities_list">
+								{% for e in s.entity_id %}
+									<span class="badge bg-primary" data-bs-toggle="tooltip" data-bs-html="true"  title="{{ e }}" >{{ friendlynames[e] }}</span>
+								{% endfor %}
 								</div>
-								<div class="week_table_row text-green week_table_row_bottom_line">
-									<div class="week_table_cell "><span class="badge  dowHiglightG ">{{ o.translations.text_ON }}</span></div>
-									{% for wd in range(1, 8): %}
-										   <div class="week_table_cell">
-											{{ format_event(s.weekly['on_'+wd|string], True)|safe }}
-										   </div>
-									{% endfor%}
-								</div>
-								<div class="week_table_row text-red week_table_row_bottom_line">
-									<div class="week_table_cell "><span class="badge  dowHiglightR ">{{ o.translations.text_OFF }}</span></div>
-									{% for wd in range(1, 8): %}
-										   <div class="week_table_cell">
-											{{ format_event(s.weekly['off_'+wd|string], False)|safe }}
-										   </div>
-									{% endfor%}
-								</div>
-							</div>
-						  </td>
-						  {% elif s.recurring %}
-						  <td class="event-cell">
-								<div class="week_table d_mode"  id="detail_{{ s.id }}">
-									<div class="week_table_row ">
-										<div class="week_table_cell ">
-											{% if s.on_tod %}
-												<div class="event-list text-green">
-													<span>  {{ s.recurring.on_start }} <i class="mdi mdi-arrow-left-right-bold" ></i>{{ s.recurring.on_end }} </span>
-													<span class="mdi mdi-timer-sand" >{{ s.recurring.on_interval }}m</span>
-												</div>
-												<!-- <div style="clear:both;" class="event-list text-green">{{ format_event(s.on_tod, True)|safe }}</div> -->
-												<div style="clear:both;">{{ get_friendly_html_dow(s.on_dow,True)|safe }}</div>
-											{% endif %}
-										</div>
-										<div class="week_table_cell ">
-											{% if s.off_tod %}
-												<div class="event-list text-red">
-													<span>  {{ s.recurring.off_start }} <i class="mdi mdi-arrow-left-right-bold" ></i>{{ s.recurring.off_end }} </span>
-													<span class="mdi mdi-timer-sand" >{{ s.recurring.off_interval }}m</span>
-												</div>
-												<!-- <div style="clear:both;" class="event-list text-red">{{ format_event(s.off_tod, False)|safe }}</div> -->
-												<div style="clear:both;">{{ get_friendly_html_dow(s.off_dow,False)|safe }}</div>
-											{% endif %}
-										</div>
+							  </td>
+							  {% if s.weekly %}
+							  <td>
+								<div class="week_table w_mode" id="detail_{{ s.id }}">
+									<div class="week_table_row week_table_header">
+										<div class="week_table_cell"></div>
+										{% for wd in range(1, 8): %}
+											   <div class="week_table_cell" style="width: 13.5%;" >
+											   {{ weekday[wd] }}
+											   </div>
+										{% endfor%}
+									</div>
+									<div class="week_table_row text-green week_table_row_bottom_line">
+										<div class="week_table_cell "><span class="badge  dowHiglightG ">{{ o.translations.text_ON }}</span></div>
+										{% for wd in range(1, 8): %}
+											   <div class="week_table_cell">
+												{{ format_event(s.weekly['on_'+wd|string], True)|safe }}
+											   </div>
+										{% endfor%}
+									</div>
+									<div class="week_table_row text-red week_table_row_bottom_line">
+										<div class="week_table_cell "><span class="badge  dowHiglightR ">{{ o.translations.text_OFF }}</span></div>
+										{% for wd in range(1, 8): %}
+											   <div class="week_table_cell">
+												{{ format_event(s.weekly['off_'+wd|string], False)|safe }}
+											   </div>
+										{% endfor%}
 									</div>
 								</div>
-						  </td>
-					  	 {% else %}
-						  <td class="event-cell">
-								<div class="week_table d_mode"  id="detail_{{ s.id }}">
-									<div class="week_table_row ">
-										<div class="week_table_cell ">
-											{% if s.on_tod %}
-												<div class="event-list text-green">{{ format_event(s.on_tod, True)|safe }}</div>
-												<div style="clear:both;">{{ get_friendly_html_dow(s.on_dow,True)|safe }}</div>
-											{% endif %}
-										</div>
-										<div class="week_table_cell ">
-											{% if s.off_tod %}
-												<div class="event-list text-red">{{ format_event(s.off_tod, False)|safe }}</div>
-												<div style="clear:both;">{{ get_friendly_html_dow(s.off_dow,False)|safe }}</div>
-											{% endif %}
+							  </td>
+							  {% elif s.recurring %}
+							  <td class="event-cell">
+									<div class="week_table d_mode"  id="detail_{{ s.id }}">
+										<div class="week_table_row ">
+											<div class="week_table_cell ">
+												{% if s.on_tod %}
+													<div class="event-list text-green">
+														<span>  {{ s.recurring.on_start }} <i class="mdi mdi-arrow-left-right-bold" ></i> {{ s.recurring.on_end }} </span>
+														<span class="mdi mdi-timer-sand" >{{ s.recurring.on_interval }}m</span>
+													</div>
+													<!-- <div style="clear:both;" class="event-list text-green">{{ format_event(s.on_tod, True)|safe }}</div> -->
+													<div style="clear:both;">{{ get_friendly_html_dow(s.on_dow,True)|safe }}</div>
+												{% endif %}
+											</div>
+											<div class="week_table_cell ">
+												{% if s.off_tod %}
+													<div class="event-list text-red">
+														<span>  {{ s.recurring.off_start }} <i class="mdi mdi-arrow-left-right-bold" ></i> {{ s.recurring.off_end }} </span>
+														<span class="mdi mdi-timer-sand" >{{ s.recurring.off_interval }}m</span>
+													</div>
+													<!-- <div style="clear:both;" class="event-list text-red">{{ format_event(s.off_tod, False)|safe }}</div> -->
+													<div style="clear:both;">{{ get_friendly_html_dow(s.off_dow,False)|safe }}</div>
+												{% endif %}
+											</div>
 										</div>
 									</div>
-								</div>
-						  </td>
-						  {% endif %}
-					  </tr>
+							  </td>
+							 {% else %}
+							  <td class="event-cell">
+									<div class="week_table d_mode"  id="detail_{{ s.id }}">
+										<div class="week_table_row ">
+											<div class="week_table_cell ">
+												{% if s.on_tod %}
+													<div class="event-list text-green">{{ format_event(s.on_tod, True)|safe }}</div>
+													<div style="clear:both;">{{ get_friendly_html_dow(s.on_dow,True)|safe }}</div>
+												{% endif %}
+											</div>
+											<div class="week_table_cell ">
+												{% if s.off_tod %}
+													<div class="event-list text-red">{{ format_event(s.off_tod, False)|safe }}</div>
+													<div style="clear:both;">{{ get_friendly_html_dow(s.off_dow,False)|safe }}</div>
+												{% endif %}
+											</div>
+										</div>
+									</div>
+							  </td>
+							  {% endif %}
+						  </tr>
 
-				{% endfor %}
+					{% endfor %}
 
-				</tbody>
-			</table>
+					</tbody>
+				</table>
+			</div>
+
 		</div>
 
-	</div>
 
+		<button type="button" class="btn btn-default btn-circle btn-xl bg-primary floating-bottom-right add-button"><span class="mdi mdi-plus"></span> </button>
 
-	<button type="button" class="btn btn-default btn-circle btn-xl bg-primary floating-bottom-right add-button"><span class="mdi mdi-plus"></span> </button>
+		<div class="overlay"></div>
 
-	<div class="overlay"></div>
-
-	<footer class="footer">
-      <div class="statusbar">
-        <p>
-			<span class="statusbar_span"><span class="mdi mdi-weather-sunset-up" ></span> {{ statusbarinfo.sunrise }}</span>
-			<span class="statusbar_span"><span class="mdi mdi-weather-sunset-down" ></span> {{ statusbarinfo.sunset }}</span>
-			<span class="statusbar_span"><span class="mdi mdi-map-clock-outline" ></span> {{ statusbarinfo.timezone }}</span>
-			<span class="statusbar_span"><span class="mdi mdi-calendar-clock" ></span> {{ statusbarinfo.scheduler }}</span>
-			<span class="statusbar_span">MQTT: {{ statusbarinfo.mqtt }}</span>
-		</p>
-      </div>
-    </footer>
-
+		<footer class="footer">
+		  <div class="statusbar">
+			<p>
+				<span class="statusbar_span"><span class="mdi mdi-weather-sunset-up" ></span> {{ statusbarinfo.sunrise }}</span>
+				<span class="statusbar_span"><span class="mdi mdi-weather-sunset-down" ></span> {{ statusbarinfo.sunset }}</span>
+				<span class="statusbar_span"><span class="mdi mdi-map-clock-outline" ></span> {{ statusbarinfo.timezone }}</span>
+				<span class="statusbar_span"><span class="mdi mdi-calendar-clock" ></span> {{ statusbarinfo.scheduler }}</span>
+				<span class="statusbar_span">MQTT: {{ statusbarinfo.mqtt }}</span>
+				<span class="statusbar_span" id="showlog"><span class="mdi mdi-file-document-outline" ></span></span>
+			</p>
+		  </div>
+		</footer>
 </div>
+
+<div id="log_wrapper" >
+	<div>
+		<pre id="logcontent"></pre>
+		<button type="button" class="btn btn-secondary" id="closelog"><span class="mdi close-box-outline" ></span> Close </button>
+	</div>
+</div>
+<div id="block_background" ></div>
 
 <script>
 
@@ -298,6 +305,26 @@
 			}
 	});
 
+	$(document).on('click', '#removeRow', function () {
+			$(this).closest('#inputFormRow').remove();
+	});
+
+	$(document).on('click', '#showlog', function () {
+			$("#logcontent").load("log" , function() {
+					$('#logcontent').scrollTop( $('#logcontent')[0].scrollHeight );
+				});
+			$("#log_wrapper").css('display','block');
+			$("#block_background").css('width','100%');
+			$("#block_background").css('height','100%');
+			$("#block_background").css('background-color','#777777e6');
+	});
+
+	$(document).on('click', '#closelog', function () {
+			$("#log_wrapper").css('display','none');
+			$("#block_background").css('width','0%');
+			$("#block_background").css('height','0%');
+			$("#block_background").css('background-color','#77777700');
+	});
 
 	function generate_recurrent(action) {
 			r = document.getElementById('recurring_preview_'+action);
