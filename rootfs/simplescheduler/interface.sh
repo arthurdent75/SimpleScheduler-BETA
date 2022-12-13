@@ -7,4 +7,4 @@
 
 bashio::log.info "Running interface.sh"
 
-python3 /usr/bin/main.py
+python3 /simplescheduler/main.py

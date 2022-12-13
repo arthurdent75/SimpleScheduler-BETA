@@ -7,4 +7,4 @@
 
 bashio::log.info "Starting service.d [Interface]"
 
-exec /usr/bin/interface.sh
+exec /simplescheduler/interface.sh

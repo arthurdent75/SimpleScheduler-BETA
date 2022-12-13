@@ -7,4 +7,4 @@
 
 bashio::log.info "Running scheduler.sh"
 
-python3 /usr/bin/scheduler.py
+python3 /simplescheduler/scheduler.py

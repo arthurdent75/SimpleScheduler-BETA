@@ -7,4 +7,4 @@
 
 bashio::log.info "Starting service.d [Scheduler]"
 
-exec /usr/bin/scheduler.sh
+exec /simplescheduler/scheduler.sh
