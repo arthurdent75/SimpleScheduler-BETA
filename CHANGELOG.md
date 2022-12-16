@@ -1,8 +1,12 @@
 **Version 2.0 (beta)**
 - Rewritten from scratch in Python
+- Complete reengineering of the docker structure
 - New feature: Recurring type scheduler (from - to - every)
 - New MQTT Engine
-- Log improvement
+- Auto respawn processes (frontend and scheduler) in case of crash
+- Full UTF8 support in scheduler name (include regional, mathematical, symbols and emoji)
+- Log moved to frontend
+- Log improvement (clear and modre detalied)
 - Massive bugfix
 
 **Version 0.64**
