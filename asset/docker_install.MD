@@ -7,7 +7,7 @@ After you clone the repository, cd to the folder that contain the Dockerfile and
 ```
 docker build . -t mysimplescheduler:latest --build-arg BUILD_FROM="ghcr.io/hassio-addons/debian-base/amd64:5.3.1"
 ```
-For architectures other than amd64, just replace amd64 with one of the following: aarch64 , armhf , armv7 , i386. /
+For architectures other than amd64, just replace amd64 with one of the following: aarch64 , armhf , armv7 , i386. 
 
 
 ## Create a token to access homeassistant
