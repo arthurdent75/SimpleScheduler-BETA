@@ -4,9 +4,9 @@
 - New feature: Recurring type scheduler (from - to - every)
 - New MQTT Engine
 - Auto respawn processes (frontend and scheduler) in case of crash
-- Full UTF8 support in scheduler name (include regional, mathematical, symbols and emoji)
+- Full UTF-8 support in scheduler name (include regional, mathematical, symbols and emoji)
 - Log moved to frontend
-- Log improvement (clear and modre detalied)
+- Log improvement (more clear and more detalied)
 - Massive bugfix
 
 **Version 0.64**
