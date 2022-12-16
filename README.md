@@ -1,22 +1,19 @@
 # SimpleScheduler
-A Home Assistant AddOn to schedule switches and lights on a weekly base in a visual way without coding.\
+A Home Assistant AddOn to schedule switches,lights and other entities on a weekly base in a visual way without coding.\
 You can keep all the schedules in one place and add/change in a few clicks, even in your mobile app.
 
 ![SimpleScheduler](https://raw.githubusercontent.com/arthurdent75/SimpleScheduler/master/asset/logo.png)
-
-![SimpleScheduler](https://raw.githubusercontent.com/arthurdent75/SimpleScheduler/master/asset/simplescheduler.gif)
-
 
 ### Installation
 Add the repository and then the addon by clickin on the badges:\
 [<img src="https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg">](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Farthurdent75%2FSimpleScheduler) \
 [<img src="https://my.home-assistant.io/badges/supervisor_addon.svg">](https://my.home-assistant.io/redirect/supervisor_addon/?addon=00185a40_simplescheduler) \
-If someting goes wrong, you can install it manually.\
+If something goes wrong, you can install it manually.\
 You can add the URL of this page in your "add-on store" as a new repository:\
-*Configuration > Add-ons, Backups & Supervisor > ADD-ON STORE button in bottom right corner >  three dots in top right corner > Repositories*\
-Click refresh and you will find the add-on "Simple Scheduler" listed.
+*Settings > Add-ons > ADD-ON STORE button in bottom right corner >  three dots in top right corner > Repositories*\
+Click *Check for updates* and you will find the add-on "Simple Scheduler" listed.
 
-If you are not using a supervised installation, you can run the addon as a docker container.
+If you are not using a supervised installation, you can run the addon as a standalone docker.
 Take a look here: [docker_install.MD](https://github.com/arthurdent75/SimpleScheduler/blob/master/asset/docker_install.MD "docker_install.MD")
 
 ### Type of scheduler
@@ -57,11 +54,11 @@ This feature is disabled by default, because it require a working MQTT server (b
 Take a look at the [MQTT.MD](https://github.com/arthurdent75/SimpleScheduler/blob/master/asset/MQTT.MD "MQTT.MD") file to know more. 
 
 ### Retry on unavailable
-By default, SimpleScheduler will retry 3 times if an entity is unavailable. The first retry happens after 5 second, the other ones every minutes. You can change the numbers of retry in the addon options.
+By default, SimpleScheduler will retry 3 times if an entity is unavailable. The first retry attempt happens after 5 second, than every minutes. You can change the numbers of retries in the addon options.
 
 ### Hidden scheduler details
 When you have a lot of schedulers the view can become messy. As a default, all the scheduler details are hidden, so you can have a clear look. 
-You can toggle the visibility with the *eye* icon near the name. 
+You can toggle the visibility with the *eye* icon near the scheduler name. 
 If you prefer to have all the schedule always visible, you can easily achive that by setting **details_uncovered: true** in the addon configuration
 
 ### Dark theme 
@@ -75,32 +72,9 @@ For the weekdays, as you can easily understand, only the first two chars are use
 
 ### Two words about the stored data
 Every schedule (or row, if you prefer) is a JSON file stored in the [share/simplescheduler] folder under the SAMBA share.
-This gives the chance to the data to "survive" to an addon upgrade or reinstallation.
+This way the data can "survive" to an addon upgrade or reinstallation.
 You can easily backup and restore them in case of failure. In the same way, you can (accidentally?) delete them. So be aware of that.
 
 ### Last but not least
-If you want to convince me to stay up at night to work on this, just <a target="_blank" href="https://www.paypal.com/donate/?hosted_button_id=8FN58C8SM9LLW">buy me a beer 🍺</a>
-You may say that regular people need coffee to do that. Well, I'm not a regular person.
-
-###  - - - - - F A Q - - - - - F A Q - - - - - F A Q - - - - - F A Q - - - - - F A Q - - - - - F A Q - - - - - 
-
-**I set a timer but it switchs on/off at a wrong time** \
-*Be sure to set the correct timezone in Settings->General* \
-*You can read the TimeZone currently used by the addon in the bottom gray row* 
-
-**I set a timer but it doesn't switch on/off**\
-*The time must be set in HH:MM format*\
-*Be sure to input time with leading zeros, e.g: 08:30*\
-*Seconds are not allowed*\
-*Also check the previous point (timezone). Maybe it works but at the wrong time!*
-
-**After update the addon doesn't seem to work**\
-*It seems that sometimes the update process fails*\
-*Try to uninstall the addon and install it again.*
-
-**I would like to add a condition**\
-*Probably this will never happen*\
-*It's tricky and I should remove the word "simple" from the addon name*\
-*By the way, you can easily solve this by creating a script that check the condition and then call the script from the scheduler*
-
-
+If you want to convince me to stay up at night to work on this, just <a target="_blank" href="https://www.paypal.com/donate/?hosted_button_id=8FN58C8SM9LLW">buy me a beer 🍺</a> \
+You may say that regular people needs coffee to do that. Well, I'm not a regular person.
