@@ -2,7 +2,13 @@
 
 ## Build the docker container
 
-Currently, no ready-to-use docker image is available. So clone this repository, run `docker build . -t mysimplescheduler:latest` and push the image to your registry.
+There is no ready-to-use docker image at the moment, so you have to build it. \
+After you clone the repository, move to the folder that contain the Dockerfile and run:
+```
+docker build . -t mysimplescheduler:latest --build-arg BUILD_FROM="ghcr.io/hassio-addons/debian-base/amd64:5.3.1"
+```
+For architectures other than amd64, just replace amd64 with one of the following: aarch64 , armhf , armv7 , i386. /
+
 
 ## Create a token to access homeassistant
 
@@ -14,7 +20,7 @@ You need to create a folder where the addon will save the data. You need to spec
 
 ## Run the docker image
 
-Run with:
+Run:
 
 ```
 docker run -d -e SUPERVISOR_TOKEN=previously-created-token -e HASSIO_URL=http://your-hass-url:port/api -v /path/to/persistent/data:/share/simplescheduler -p 8099:8099 mysimplescheduler:latest
@@ -26,5 +32,3 @@ You can access the scheduler now at `http://localhost:8099`.
 
 After the first run you will find the option.dat file in the persistent data folder. Change it and rerun the container.
 
-
-(Thanks to https://github.com/micw)
