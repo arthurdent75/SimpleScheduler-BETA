@@ -3,7 +3,7 @@
 ## Build the docker container
 
 There is no ready-to-use docker image at the moment, so you have to build it. \
-After you clone the repository, move to the folder that contain the Dockerfile and run:
+After you clone the repository, cd to the folder that contain the Dockerfile and run:
 ```
 docker build . -t mysimplescheduler:latest --build-arg BUILD_FROM="ghcr.io/hassio-addons/debian-base/amd64:5.3.1"
 ```
