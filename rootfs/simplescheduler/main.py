@@ -421,6 +421,7 @@ def get_switch_html_select_options():
         name = s['id'] if s['friendly_name'] == "" else s['friendly_name'] + '(' + s['id'] + ')'
         htmlstring += '<option value="' + s['id'] + '">' + name + '</option>'
     htmlstring += '</optgroup>'
+    htmlstring = htmlstring.replace(chr(39), "&#39;")
     return htmlstring
 
 
