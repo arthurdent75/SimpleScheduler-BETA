@@ -1,17 +1,17 @@
 {
   "translations": {
-    "text_monday": "Lunedì",
-    "text_tuesday": "Martedì",
-    "text_wednesday": "hǎo",
-    "text_thursday": "пьютер",
-    "text_friday": "Måndag",
-    "text_saturday": "Sa",
-    "text_sunday": "Do",
+    "text_monday": "Monday",
+    "text_tuesday": "Tuesday",
+    "text_wednesday": "Wednesday",
+    "text_thursday": "Thursday",
+    "text_friday": "Friday",
+    "text_saturday": "Saturday",
+    "text_sunday": "Sunday",
     "text_ON": "ON",
     "text_OFF": "OFF",
-    "text_save": "Salva",
-    "text_enabled": "Abilitato",
-    "text_device": "Dispositivo",
+    "text_save": "Save",
+    "text_enabled": "Enabled",
+    "text_device": "Device",
     "text_name": "Name"
   },
   "components": {
