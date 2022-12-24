@@ -15,7 +15,7 @@
 <style>
 {{ css|safe }}
 
-{% if o.details_uncovered==True %}
+{% if o.details_uncovered==1 %}
 .week_table{ display: table;}
 {% endif %}
 
@@ -33,12 +33,19 @@
 			</div>
 		</nav>
 
+		<form action="saveconfig" method="get" id="config-form" >
+
 		<div class="content" >
 			<div>
 				<table class="table table-hover" id="dtable">
 					<thead class="bg-primary">
 					<tr>
-					  <th scope="col" colspan="4" ><h5>SimpleScheduler</H5></th>
+					  <th scope="col" colspan="4" >
+						  <span class="titlebar_span" id="title">SimpleScheduler</span>
+						  <span class="titlebar_span" id="show-add"><button type="button" class="btn btn-default bg-white main-color" ><span class="mdi mdi-plus"></span></button></span>
+						  <span class="titlebar_span" id="show-log"><button type="button" class="btn btn-default bg-white main-color" ><span class="mdi mdi-file-document-outline" ></span></button></span>
+						  <span class="titlebar_span" id="show-config"><button type="button" class="btn btn-default bg-white main-color" ><span class="mdi mdi-cog-outline"></span></button></span>
+					  </th>
 					</tr>
 					</thead>
 					<tbody>
@@ -152,8 +159,7 @@
 
 		</div>
 
-
-		<button type="button" class="btn btn-default btn-circle btn-xl bg-primary floating-bottom-right add-button"><span class="mdi mdi-plus"></span> </button>
+        </form>
 
 		<div class="overlay"></div>
 
@@ -165,7 +171,7 @@
 				<span class="statusbar_span"><span class="mdi mdi-map-clock-outline" ></span> {{ statusbarinfo.timezone }}</span>
 				<span class="statusbar_span"><span class="mdi mdi-calendar-clock" ></span> {{ statusbarinfo.scheduler }}</span>
 				<span class="statusbar_span">MQTT: {{ statusbarinfo.mqtt }}</span>
-				<span class="statusbar_span" id="showlog"><span class="mdi mdi-file-document-outline" ></span></span>
+
 			</p>
 		  </div>
 		</footer>
@@ -238,15 +244,36 @@
 			}
     });
 
-	$(document).on('click', '.add-button', function () {
+	$(document).on('click', '#show-add', function () {
 			$("#sidebar-wrapper").html('');
 			$("#sidebar").show();
             $("#sidebar-wrapper").load("new");
     });
 
+	$(document).on('click', '#show-config', function () {
+            $("#dtable tbody").load("config");
+    });
+
+	$(document).on('click', '#close-config', function () {
+            window.location.href="main";
+    });
+
+	$(document).on('click', '#save-config', function () {
+			var f = document.getElementById("config-form");
+			$("input:checkbox:not(:checked)").each( function () {
+				$(this).prop('checked',true);
+				$(this).attr('value','0');
+			})
+			f.submit();
+	});
+
+	$(document).on('click', '#clone-button', function () {
+			var id=$(this).attr('aria-id');
+			window.location.href ='clone?id='+id;
+    });
+
 	$(document).on('click', '.delete-button', function () {
 			var id=$(this).attr('aria-id');
-			var f = document.getElementById("edit-form");
 			if (window.confirm("Are you sure?")) {
 				window.location.href ='delete?id='+id;
 			}
@@ -309,7 +336,7 @@
 			$(this).closest('#inputFormRow').remove();
 	});
 
-	$(document).on('click', '#showlog', function () {
+	$(document).on('click', '#show-log', function () {
 			$("#logcontent").load("log" , function() {
 					$('#logcontent').scrollTop( $('#logcontent')[0].scrollHeight );
 				});

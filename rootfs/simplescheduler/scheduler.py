@@ -16,6 +16,7 @@ if __name__ == '__main__':
     schedulers_list = main.load_json_schedulers()
 
     max_retry = int(options['max_retry'])
+    if max_retry==0: max_retry=3
 
     while True:
         seconds = datetime.now().strftime("%S")

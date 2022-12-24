@@ -1,16 +1,24 @@
- /* td { border: 1px solid #ccc; }  */
+    :root {
+      --maincolor: #007bff;
+    }
 
 	H5 {margin-bottom: 0 ; line-height: 14px; }
+
+    .main-color { color: var(--maincolor)!important; }
 
     div.content {  margin-bottom: 2em; }
 
 
 	.table td,  .table  th {
 		vertical-align: top;
-		border-bottom: 1px solid #007bff;
+		border-bottom: 1px solid var(--maincolor);
 		border-top: none;
 		
 	}
+
+    THEAD {
+        line-height: 3em;
+    }
 
 	#sidebar {
 		display:none;
@@ -64,6 +72,18 @@
 		color:white; 
 		background-color: #03a9f4!important;
 	}
+
+    .titlebar_span {
+        font-size: 1.25em;
+        margin-right: 1em;
+        text-shadow: 1px 1px 3px #000;
+    }
+
+    .titlebar_span  button {
+        box-shadow: 2px 2px 2px 0px #00000077;
+        font-size: 1.25em;
+        line-height: 1em;
+    }
 
     div.row-title P {
         font-size: 1.2em;
@@ -308,10 +328,33 @@
      }
 
 
-
+    #edit_buttons > button:first-child {
+        margin-right: 1em;
+    }
 
     .float-left { float:left}
     .float-right { float:right}
+
+    tr.config_section {
+        background: #777;
+        font-weight: bold;
+        color: white;
+    }
+
+    tr.config_section td {
+        border: none;
+    }
+
+    tr.config_item td {
+        border: none;
+    }
+
+    tr.config_item td.config_input,
+    tr.config_item td.config_label {
+        width: 10%;
+        min-width: 150px;
+        padding: 0.25em 1em;
+    }
 
 	@media screen and (min-width: 1281px) {
 		html {	font-size: 10pt; }
@@ -334,23 +377,25 @@
 			border: none !important;
 		}
 
-		#dtable TD:first-child {display:none;}
-		#dtable TD:nth-child(2) {
-
-		}
+		#dtable TD:nth-child(2) {		}
 
 		#dtable TR {
-			border-bottom: 1px solid #007bff;
+			border-bottom: 1px solid var(--maincolor);
 		}
 
-		#dtable THEAD {			display: none; 		}
+        #config-form .input-sm {text-align:center;}
 
 		td.name_col {width: 100%; max-width: none;}
-		
+
 		.event-list > span { float: none; display: inline-block; }
 		
 		#sidebar { max-width: 90%; }
-		
+
+        tr.config_item td.config_input,
+        tr.config_item td.config_label {
+            width: 100%;
+        }
+
 		.fit {
 			white-space: normal;
 			width: auto;

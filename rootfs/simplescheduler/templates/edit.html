@@ -175,9 +175,12 @@
 					<div style="clear:both;"></div>
    					<br/>
 
-					<div>
+					<div id="edit_buttons">
 						<button type="submit" class="btn btn-default bg-success float-left" id="save-button"><span class="mdi mdi-content-save" ></span> {{ o.translations.text_save }} </button>
+						{% if is_new==False: %}
+						<button type="button" class="btn btn-default bg-warning float-left" id="clone-button" aria-id="{{ p.id }}" ><span class="mdi mdi-content-copy" ></span> {{ o.translations.text_clone }} </button>
 						<button type="button" class="btn btn-default  bg-danger float-right delete-button" aria-id="{{ p.id }}"  ><span class="mdi mdi-delete" ></span> </button>
+						{% endif %}
 					</div>
 
 				</form>

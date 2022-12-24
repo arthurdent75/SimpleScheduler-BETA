@@ -30,10 +30,10 @@
   },
   "MQTT": {
     "enabled": false,
-    "server": "172.16.200.167",
+    "server": "core-mosquitto",
     "port": "1883",
-    "username": "test",
-    "password": "test"
+    "username": "",
+    "password": ""
   },
   "max_retry": "3",
   "details_uncovered": true,

@@ -62,6 +62,7 @@ def webserver_delete():
 
 @app.route('/edit', methods=['GET'])
 def webserver_edit():
+    is_new = False
     args = request.args
     sid = args.get('id')
     stype: str = args.get('type')
@@ -72,13 +73,74 @@ def webserver_edit():
     else:
         param = json.loads(get_json_template(stype))
         param['id'] = uuid.uuid4().hex
+        is_new = True
 
     return render_template('edit.html',
                            p=param,
                            o=get_options(),
                            weekday=weekday,
-                           switchlist=get_switch_html_select_options()
+                           switchlist=get_switch_html_select_options(),
+                           is_new=is_new
                            )
+
+
+@app.route('/config', methods=['GET'])
+def webserver_config():
+    return render_template('config.html',
+                           o=get_options()
+                           )
+
+
+@app.route('/saveconfig', methods=['GET'])
+def webserver_saveconfig():
+    jsondata = {}
+    translations = {}
+    components = {}
+    mqttconf = {}
+    content = request.args
+    for item in content:
+        if content[item] == '0' or content[item] == '1':
+            value = int(content[item])
+        else:
+            value = content[item]
+        if "." in item:
+            p = item.split(".")
+            cat = p[0].lower()
+            subcat = p[1]
+            if cat == "translations":  translations[subcat] = value
+            if cat == "components":  components[subcat] = value
+            if cat == "mqtt":  mqttconf[subcat] = value
+        else:
+            jsondata[item] = value
+
+    jsondata["translations"] = translations
+    jsondata["components"] = components
+    jsondata["MQTT"] = mqttconf
+
+    option_file_path = os.path.join(simpleschedulerconf.json_folder, "options.dat")
+    with open(option_file_path, 'w') as option_file:
+        json_config = json.dump(jsondata, option_file)
+
+    init()
+
+    return redirect("main")
+
+
+@app.route('/clone', methods=['GET'])
+def webserver_clone():
+    args = request.args
+    sid = args.get('id')
+    file = simpleschedulerconf.json_folder + sid + '.json'
+    if os.path.exists(file) and sid != "0":
+        with open(file, "r") as read_file:
+            param = json.load(read_file)
+        newsid = uuid.uuid4().hex
+        newfile = simpleschedulerconf.json_folder + newsid + '.json'
+        param['id'] = newsid
+        param['name'] = param['name'] + " (2) "
+        with open(newfile, 'w') as jsonFile:
+            json.dump(param, jsonFile)
+    return redirect("main")
 
 
 @app.route("/update", methods=['POST'])
@@ -149,6 +211,7 @@ def webserver_sort():
     save_sort_list(data)
     return make_response("", 200)
 
+
 @app.route("/log", methods=['GET'])
 def webserver_log():
     response = ""
@@ -156,6 +219,7 @@ def webserver_log():
     with open(logfilepath, "r", encoding='utf-8') as logfile:
         response += logfile.read()
     return make_response(response, 200)
+
 
 @app.route("/dirty")
 def webserver_dirty():
@@ -374,7 +438,8 @@ def mqtt_send_config(client):
 
 
 def get_options():
-    path = "/data/options.json"
+    # path = "/data/options.json"
+    path = os.path.join(simpleschedulerconf.json_folder, "options.dat")
     if not os.path.exists(path):
         path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "options.dat")
     with open(path, "r", encoding='utf-8') as read_file:
@@ -675,9 +740,11 @@ def printlog(message):
         logfile.write(fullrow + "\n")
 
 
-if __name__ == '__main__':
-
-    printlog('STATUS: Starting main program')
+def init():
+    global options
+    global weekday
+    global schedulers_list
+    global ha_timezone
 
     options = get_options()
     weekday = \
@@ -699,6 +766,13 @@ if __name__ == '__main__':
     schedulers_list = load_json_schedulers()
 
     ha_timezone = get_ha_timezone()
+
+
+if __name__ == '__main__':
+
+    printlog('STATUS: Starting main program')
+
+    init()
 
     if options['MQTT']['enabled']:
         printlog('STATUS: Starting MQTT')
