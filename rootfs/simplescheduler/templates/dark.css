@@ -1,6 +1,6 @@
 BODY { 	background-color: #111111; color: white; }
 
-.table td, .table th {  border-top: 1px solid #333; }
+.table td, .table th {  border-top: 1px solid #333; color: white; }
 
 .week_table_header { color: #e1e1e1; }
 
@@ -32,3 +32,4 @@ div.row-title P {color: white;}
         opacity: 1;
      }
 
+#logcontent {color: #000}
