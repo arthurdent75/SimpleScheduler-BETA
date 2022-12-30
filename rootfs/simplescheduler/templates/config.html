@@ -23,7 +23,7 @@
 <tr class="config_section"><td colspan="4">TRANSLATIONS</td></tr>
     {% for t in o.translations %}
     <tr class="config_item">
-        <td class="config_label">{{ t }}</td>
+        <td class="config_label">{{ t | replace("text_","") | upper }}</td>
         <td class="config_input"><input type="text" value="{{ o.translations[t] }}" class="form-control input-sm" name="translations.{{ t }}" ></td>
         <td colspan="2">
     </tr>

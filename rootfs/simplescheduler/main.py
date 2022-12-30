@@ -147,6 +147,7 @@ def webserver_clone():
 def webserver_update():
     sid = request.form.get('id')
     enabled = request.form.get("enabled")
+    dontretry = request.form.get("dontretry")
     name = request.form.get("name")
     entity_id = request.form.getlist('entity_id[]')
     type = request.form.get('type')
@@ -164,6 +165,7 @@ def webserver_update():
     data['id'] = sid
     data['name'] = name if name else sid
     data['enabled'] = enabled if enabled else 0
+    data['dontretry'] = dontretry if dontretry else 0
     data['entity_id'] = entity_id
     if type == 'weekly':
         data['weekly']['on_1'] = request.form.get('on_1')
@@ -408,7 +410,7 @@ def mqtt_publish_state(client, object_id, pub_value, echo=False):
     if pub_value:
         payload = 'ON'
     topic = 'homeassistant/switch/simplescheduler/' + object_id + '/state'
-    client.publish(topic, payload, qos=0, retain=0)
+    client.publish(topic, payload, qos=0, retain=1)
     if echo:
         printlog('MQTT: PUB ' + topic + ' --> ' + payload)
 
@@ -617,7 +619,7 @@ def call_ha(eid_list, action, passedvalue, friendly_name):
                     command_url = simpleschedulerconf.HASSIO_URL + "/services/climate/set_temperature"
                     postdata = '{"entity_id":"%s","temperature":"%s"}' % (eid, v)
                     command = "Setting"
-                    extra = "temperature to " + value + '°'
+                    extra = "temperature to " + v + '°'
         else:
             if domain[0] == "cover":
                 command_url = simpleschedulerconf.HASSIO_URL + "/services/cover/close_cover"
@@ -637,6 +639,14 @@ def call_ha(eid_list, action, passedvalue, friendly_name):
 
     return True
 
+def is_a_retry_domain(entity):
+    response = True
+    if "scene." in entity : response = False
+    if "script." in entity: response = False
+    if "automation." in entity: response = False
+    if "media_player." in entity: response = False
+    if "camera." in entity: response = False
+    return response
 
 def get_events_array(s):
     s = s.upper().replace(',', ' ').replace(';', ' ').strip()

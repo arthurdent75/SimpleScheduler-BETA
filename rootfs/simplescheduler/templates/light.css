@@ -349,11 +349,16 @@
         border: none;
     }
 
+    #config-form .form-control {
+        padding: 0.1rem 0.75rem;
+    }
+
     tr.config_item td.config_input,
     tr.config_item td.config_label {
         width: 10%;
         min-width: 150px;
         padding: 0.25em 1em;
+        vertical-align: middle;
     }
 
 	@media screen and (min-width: 1281px) {

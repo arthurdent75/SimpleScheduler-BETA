@@ -10,6 +10,8 @@
 					</div>
 					<div>
 						<label class="checkbox-inline"><input type="checkbox" name="enabled" value="1" {{ 'checked ' if p.enabled else ' ' }}  > {{ o.translations.text_enabled }}</label>
+						&nbsp;&nbsp;&nbsp;
+						<label class="checkbox-inline"><input type="checkbox" name="dontretry" value="1" {{ 'checked ' if p.dontretry else ' ' }}  > Do not retry</label>
 					</div>
 
 					<div class="edit-section-label"><label>{{ o.translations.text_device }}</label></div>
