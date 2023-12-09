@@ -1,12 +1,33 @@
+**Version 2.2**
+- New feature: add parameters for RGB/CT lights (#138)
+- New feature: support humidifiers (#135) 
+
+**Version 2.1**
+- Fix "Corrupted JSON files crash the addon" (#123)
+- Fix "Setting hours to 24 crash the addon" (#124) 
+
+**Version 2.0.50 (beta)**
+- Fix MQTT Switches unavailable on restart (#111)
+- Fix error if entity is null (#110) 
+
+**Version 2.0.48 (beta)**
+- create json folder if missing
+- enable flask logs
+
 **Version 2.0 (beta)**
 - Rewritten from scratch in Python
 - Complete reengineering of the docker structure
+- New feature: Configuration moved to frontend (you need to set option again!)
 - New feature: Recurring type scheduler (from - to - every)
+- New feature: Added "Do not retry" flag
+- New feature: Added "Clone" button
 - New MQTT Engine
 - Auto respawn processes (frontend and scheduler) in case of crash
 - Full UTF-8 support in scheduler name (include regional, mathematical, symbols and emoji)
 - Log moved to frontend
 - Log improvement (more clear and more detalied)
+- Improvement of "Max Retry" option behavior
+- Avoid queuing of some domains (script, scene, ecc)
 - Massive bugfix
 
 **Version 0.64**
