@@ -152,6 +152,7 @@ def webserver_update():
     sid = request.form.get('id')
     enabled = request.form.get("enabled")
     dontretry = request.form.get("dontretry")
+    template = request.form.get("template")
     name = request.form.get("name")
     entity_id = request.form.getlist('entity_id[]')
     type = request.form.get('type')
@@ -170,6 +171,7 @@ def webserver_update():
     data['name'] = name if name else sid
     data['enabled'] = enabled if enabled else 0
     data['dontretry'] = dontretry if dontretry else 0
+    data['template'] = template.replace('"',"'") if template else ''
     data['entity_id'] = entity_id
     if type == 'weekly':
         data['weekly']['on_1'] = request.form.get('on_1')
@@ -264,12 +266,12 @@ def utility_processor():
                     else:
                         extra = '<span class="event-type-t"><i class="mdi mdi-power" aria-hidden="true"></i>' + v + '&deg;</span>'
                 if prefix == 'H':
-                        extra = '<span class="event-type-h"><i class="mdi mdi-water-percent" aria-hidden="true"></i>' + v + '%</span>'
+                    extra = '<span class="event-type-h"><i class="mdi mdi-water-percent" aria-hidden="true"></i>' + v + '%</span>'
                 if prefix == 'B':
                     vv = v.split('|')
                     brightness = vv[0]
                     extrainfo = ""
-                    if len(vv) > 1 :
+                    if len(vv) > 1:
                         color = vv[1]
                         colorValue = color[1:]
                         if color[0] == 'K':
@@ -278,10 +280,9 @@ def utility_processor():
                             extrainfo = ' <div class="colorsample" title="#' + color + '" style="background-color:#' + color + ';" ></div>'
                     if brightness[0] == 'A':
                         brightness = brightness[1:]
-                        extra = '<span class="event-type-b"><i class="mdi mdi-lightbulb" aria-hidden="true"></i>' + brightness +  extrainfo +'</span>'
+                        extra = '<span class="event-type-b"><i class="mdi mdi-lightbulb" aria-hidden="true"></i>' + brightness + extrainfo + '</span>'
                     else:
                         extra = '<span class="event-type-b"><i class="mdi mdi-lightbulb" aria-hidden="true"></i>' + brightness + '%' + extrainfo + '</span>'
-
 
             result += '<span>' + t + extra + '</span >'
         return result
@@ -600,6 +601,32 @@ def get_entity_status(e, check):
     return response
 
 
+def evaluate_template(t: str):
+    opt = get_options()
+    response: bool = False
+    headers = {'content-type': 'application/json', 'Authorization': 'Bearer ' + simpleschedulerconf.SUPERVISOR_TOKEN}
+    command_url = simpleschedulerconf.HASSIO_URL + "/template"
+    post_data = '{"template":"' + t + '"}'
+    try:
+        if opt['debug']: printlog("DEBUG: Evaluating template %s" % (t))
+        r = requests.post(url=command_url, data=post_data, headers=headers, timeout=request_timeout)
+        if r.content:
+            content = r.content.decode()
+        if r.status_code != 200:
+            printlog("ERROR: Error calling HA API " + str(r.status_code))
+            if "message" in content.lower():
+                json_response = json.loads(r.content)
+                error= json_response['message']
+                printlog("ERROR: template error: %s" % (error))
+        else:
+            if content.lower() == 'true':
+                response = True
+
+    except:
+        printlog("ERROR: Unable to call Home Assistant template API")
+    return response
+
+
 def call_ha_api(command_url: str, post_data: str):
     opt = get_options()
     headers = {'content-type': 'application/json', 'Authorization': 'Bearer ' + simpleschedulerconf.SUPERVISOR_TOKEN}
@@ -630,7 +657,10 @@ def call_ha(eid_list, action, passedvalue, friendly_name):
             if domain[0] == "light" and value != "":
                 pieces = value.split("|")
                 part_one = pieces[0]
-                part_two = pieces[1]
+                if len(pieces) > 1:
+                    part_two = pieces[1]
+                else:
+                    part_two = ''
 
                 if part_one[0] == "A":
                     v = int(part_one[1:])
@@ -641,13 +671,13 @@ def call_ha(eid_list, action, passedvalue, friendly_name):
                 postdata = '{"entity_id":"%s","brightness":"%d"}' % (eid, v)
 
                 if part_two:
-                    if part_two[0]=="K":
+                    if part_two[0] == "K":
                         kelvin = int(part_two[1:])
                         postdata = '{"entity_id":"%s","brightness":"%d","color_temp_kelvin":"%d"}' % (eid, v, kelvin)
                     else:
                         HEX_color = part_two
                         rgb = list(int(HEX_color[i:i + 2], 16) for i in (0, 2, 4))
-                        postdata = '{"entity_id":"%s","brightness":"%d","rgb_color":%s}' % (eid, v , rgb)
+                        postdata = '{"entity_id":"%s","brightness":"%d","rgb_color":%s}' % (eid, v, rgb)
 
             if domain[0] == "fan" and value != "":
                 v = value

@@ -32,6 +32,11 @@
 						<button id="addRow" type="button" class="btn btn-info bg-primary addRow">+</button>
 					</div>
 
+					<div class="edit-section-label"><label>Template</label></div>
+					<div>
+						<input type="text" name="template" class="form-control input-sm" value="{{ p.template }}">
+					</div>
+
 					{% if p.weekly: %}
 					<input type="hidden" name="type" value="weekly" >
 					<div class="edit-section-label"><label>{{ o.translations.text_ON }} / {{ o.translations.text_OFF }}</label></div>

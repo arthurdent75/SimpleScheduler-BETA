@@ -1,7 +1,17 @@
+**Version 2.5**
+- New feature: add template condition
+- Fix few bugs in frontend
+
+**Version 2.2.1**
+- Fix "Simple Scheduler no longer switching on lamps with brightness" (#142)
+
 **Version 2.2**
 - New feature: add parameters for RGB/CT lights (#138)
 - New feature: support humidifiers (#135) 
 
+**Version 2.11**
+- Fix "Allow non admin users to view panel" (#74)
+ 
 **Version 2.1**
 - Fix "Corrupted JSON files crash the addon" (#123)
 - Fix "Setting hours to 24 crash the addon" (#124) 

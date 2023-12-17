@@ -66,7 +66,12 @@
 								<button type="button" class="btn btn-default bg-primary view-button" aria-id="{{ s.id }}" ><span class="mdi mdi-eye" ></span></button>
 							  </td>
 							  <td  class="name_col" >
-								<div class="row-title"><p data-bs-toggle="tooltip" data-bs-html="true"  title="{{ s.id }}" >{{ s.name }}</p></div>
+								<div class="row-title">
+									<p data-bs-toggle="tooltip" data-bs-html="true"  title="{{ s.id }}" >
+									{% if s.template %}<span class="mdi mdi-directions-fork" ></span>{% endif %}
+									{{ s.name }}
+									</p>
+								</div>
 								<div class="entities_list">
 								{% if s.entity_id %}
 								{% for e in s.entity_id %}
@@ -109,20 +114,20 @@
 									<div class="week_table d_mode"  id="detail_{{ s.id }}">
 										<div class="week_table_row ">
 											<div class="week_table_cell ">
-												{% if s.on_tod %}
+												{% if s.on_dow and s.on_tod %}
 													<div class="event-list text-green">
-														<span>  {{ s.recurring.on_start }} <i class="mdi mdi-arrow-left-right-bold" ></i> {{ s.recurring.on_end }} </span>
-														<span class="mdi mdi-timer-sand" >{{ s.recurring.on_interval }}m</span>
+														<span>  {{ s.recurring.on_start }} <i class="mdi mdi-arrow-left-right-bold" ></i> {{ s.recurring.on_end }}
+														<span class="mdi mdi-timer-sand" >{{ s.recurring.on_interval }}m</span></span>
 													</div>
 													<!-- <div style="clear:both;" class="event-list text-green">{{ format_event(s.on_tod, True)|safe }}</div> -->
 													<div style="clear:both;">{{ get_friendly_html_dow(s.on_dow,True)|safe }}</div>
 												{% endif %}
 											</div>
 											<div class="week_table_cell ">
-												{% if s.off_tod %}
+												{% if s.off_dow and s.off_tod %}
 													<div class="event-list text-red">
-														<span>  {{ s.recurring.off_start }} <i class="mdi mdi-arrow-left-right-bold" ></i> {{ s.recurring.off_end }} </span>
-														<span class="mdi mdi-timer-sand" >{{ s.recurring.off_interval }}m</span>
+														<span>  {{ s.recurring.off_start }} <i class="mdi mdi-arrow-left-right-bold" ></i> {{ s.recurring.off_end }}
+														<span class="mdi mdi-timer-sand" >{{ s.recurring.off_interval }}m</span></span>
 													</div>
 													<!-- <div style="clear:both;" class="event-list text-red">{{ format_event(s.off_tod, False)|safe }}</div> -->
 													<div style="clear:both;">{{ get_friendly_html_dow(s.off_dow,False)|safe }}</div>
@@ -136,13 +141,13 @@
 									<div class="week_table d_mode"  id="detail_{{ s.id }}">
 										<div class="week_table_row ">
 											<div class="week_table_cell ">
-												{% if s.on_tod %}
+												{% if s.on_dow and s.on_tod %}
 													<div class="event-list text-green">{{ format_event(s.on_tod, True)|safe }}</div>
 													<div style="clear:both;">{{ get_friendly_html_dow(s.on_dow,True)|safe }}</div>
 												{% endif %}
 											</div>
 											<div class="week_table_cell ">
-												{% if s.off_tod %}
+												{% if s.off_dow and s.off_tod %}
 													<div class="event-list text-red">{{ format_event(s.off_tod, False)|safe }}</div>
 													<div style="clear:both;">{{ get_friendly_html_dow(s.off_dow,False)|safe }}</div>
 												{% endif %}
