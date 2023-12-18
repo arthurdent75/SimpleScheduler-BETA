@@ -52,6 +52,24 @@ If you need more advanced features:
 
 Look at the picture above to see all these things in action (and combined!).
 
+### Conditions
+For each scheduler, you can add a condition that will be checked at the time of the execution.
+If the condition is 'true' the action will be performed and (obviously) it won't be executed if the condition is 'false'.
+The condition is a template expression that you can add in the "template" field.
+If the field is empty, no check will be performed and the action will always be executed. \
+The template expression **must return a boolean** ('True' or 'False'). \
+So be sure to "convert" switches, lights, and any other entity states to boolean. A few examples:
+``` 
+{{  states('switch.my_switch') | bool }}
+{{  not states('light.my_light') | bool }}
+{{  states('sensor.room_temperature') | float > 23.5   }}
+{{  is_state('person.my_kid', 'not_home')  }}
+{{  states('sensor.room_temperature') | float > 23.5 and is_state('sun.sun', 'above_horizon')  }}
+``` 
+If the template returns 'on', 'open', 'home', 'armed', '1' and so on,  it will all be treated as 'False'. \
+If the template expression has syntax errors it will be considered 'false', and it will be reported in the addon log.\
+Use the template render utility in Developer Tools to test the condition before putting it into the scheduler.
+
 ### Frontend switch to enable/disable (with MQTT)
 If you want to enable/disable schedulers in frontend and/or automation, you can achieve that through MQTT.
 This feature is disabled by default because it requires a working MQTT server (broker) and Home Assistant MQTT integration.
