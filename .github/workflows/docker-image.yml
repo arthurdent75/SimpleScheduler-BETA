@@ -10,7 +10,6 @@ env:
   BUILD_FROM: ghcr.io/hassio-addons/debian-base/armhf:5.3.1 
        
 jobs:
-   docker:
      runs-on: ubuntu-latest
 
      steps:
