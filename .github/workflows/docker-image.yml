@@ -27,6 +27,7 @@ jobs:
            context: .
            platforms: ${{ matrix.platform }}
            labels: ${{ steps.meta.outputs.labels }}
+           tags: ${{ steps.meta.outputs.tags }}
            outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
 
 #             BUILD_FROM=ghcr.io/hassio-addons/debian-base/armhf:5.3.1   
