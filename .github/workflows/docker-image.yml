@@ -9,14 +9,18 @@ env:
   IMAGE_NAME: ${{ github.repository }}
   
 jobs:
-  build:
+  build-and-push-image:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     strategy:
       fail-fast: false
       matrix:
         platform:
           - linux/amd64
           - linux/armhf
+          
     steps:
       - name: Checkout
         uses: actions/checkout@v4
