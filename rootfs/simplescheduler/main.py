@@ -246,7 +246,7 @@ def utility_processor():
         if not value: return ''
         result: str = ""
         extra: str = ""
-        events = value.upper().replace(',', ' ').replace(';', ' ').split(' ')
+        events = value.upper().replace(',', ' ').replace(';', ' ').split(" ")
 
         for e in events:
             p = e.split('>')  # separate time from extra commands
@@ -284,7 +284,8 @@ def utility_processor():
                     else:
                         extra = '<span class="event-type-b"><i class="mdi mdi-lightbulb" aria-hidden="true"></i>' + brightness + '%' + extrainfo + '</span>'
 
-            result += '<span>' + t + extra + '</span >'
+            if t: result += '<span>' + t + extra + '</span >'
+
         return result
 
     return dict(format_event=format_event)

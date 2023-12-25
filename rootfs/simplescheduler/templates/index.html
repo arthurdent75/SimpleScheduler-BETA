@@ -40,7 +40,7 @@
 				<table class="table table-hover" id="dtable">
 					<thead class="bg-primary">
 					<tr>
-					  <th scope="col" colspan="4" >
+					  <th scope="col" colspan="5" >
 						  <span class="titlebar_span" id="title">SimpleScheduler</span>
 						  <span class="titlebar_span" id="show-add"><button type="button" class="btn btn-default bg-white main-color" ><span class="mdi mdi-plus"></span></button></span>
 						  <span class="titlebar_span" id="show-log"><button type="button" class="btn btn-default bg-white main-color" ><span class="mdi mdi-file-document-outline" ></span></button></span>
@@ -60,18 +60,15 @@
 							  {% else %}
 							  <td class="text-center drag_icon fit"><span class="mdi mdi-calendar-week mdi-24px" ></span></td>
 							  {% endif %}
+
+							  <td class="text-center fit">{% if s.template %}<span class="mdi mdi-directions-fork mdi-24px" ></span>{% endif %}</span></td>
+
 							  <td class="text-center fit" >
 								<button type="button" class="btn btn-default bg-primary edit-button" aria-id="{{ s.id }}" ><span class="mdi mdi-pencil" ></span></button>
-								&nbsp;
 								<button type="button" class="btn btn-default bg-primary view-button" aria-id="{{ s.id }}" ><span class="mdi mdi-eye" ></span></button>
 							  </td>
 							  <td  class="name_col" >
-								<div class="row-title">
-									<p data-bs-toggle="tooltip" data-bs-html="true"  title="{{ s.id }}" >
-									{% if s.template %}<span class="mdi mdi-directions-fork" ></span>{% endif %}
-									{{ s.name }}
-									</p>
-								</div>
+								<div class="row-title"><p data-bs-toggle="tooltip" data-bs-html="true"  title="{{ s.id }}" >{{ s.name }}</p></div>
 								<div class="entities_list">
 								{% if s.entity_id %}
 								{% for e in s.entity_id %}

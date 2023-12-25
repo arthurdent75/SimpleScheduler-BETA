@@ -32,9 +32,10 @@
 						<button id="addRow" type="button" class="btn btn-info bg-primary addRow">+</button>
 					</div>
 
-					<div class="edit-section-label"><label>Template</label></div>
+					<div class="edit-section-label"><label>Condition Template</label></div>
 					<div>
-						<input type="text" name="template" class="form-control input-sm" value="{{ p.template }}">
+						<!--- <input type="text" name="template" class="form-control input-sm" value="{{ p.template }}"> -->
+						<textarea name="template" class="form-control input-sm">{{ p.template }}</textarea>
 					</div>
 
 					{% if p.weekly: %}
