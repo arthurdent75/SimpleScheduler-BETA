@@ -32,10 +32,11 @@
 						<button id="addRow" type="button" class="btn btn-info bg-primary addRow">+</button>
 					</div>
 
-					<div class="edit-section-label"><label>Condition Template</label></div>
+					<div class="edit-section-label"><label>Condition Template <span class="mdi mdi-thumb-up"></span> <span class="mdi mdi-thumb-down"></span></label></div>
 					<div>
 						<!--- <input type="text" name="template" class="form-control input-sm" value="{{ p.template }}"> -->
-						<textarea name="template" class="form-control input-sm">{{ p.template }}</textarea>
+						<textarea name="template" id="template" class="form-control input-sm">{{ p.template }}</textarea>
+						<div id="notice"></div>
 					</div>
 
 					{% if p.weekly: %}
@@ -160,23 +161,36 @@
 
 					{% else %}
 					<input type="hidden" name="type" value="daily" >
-							<div class="edit-section-label"><label>{{ o.translations.text_ON }}</label></div>
-							<div>
-								<input type="text" name="on_tod" class="form-control input-sm" value="{{ p.on_tod }}">
+
+							<div class="form-row">
+								<div class="col">
+									<div class="edit-section-label"><label>{{ o.translations.text_ON }} <span class="mdi mdi-thumb-up"></span></label></div>
+									<textarea name="on_tod" class="form-control input-sm"  > {{ p.on_tod }}</textarea>
+								</div>
+								<div class="col">
+									<div class="edit-section-label"><label>{{ o.translations.text_ON }} <span class="mdi mdi-thumb-down"></label></div>
+									<textarea name="on_tod_false" class="form-control input-sm"  > {{ p.on_tod_false }}</textarea>
+								</div>
 							</div>
 
-							<div>
+							<div class="text-center">
 								{% for wd in range(1, 8): %}
 									<label class="checkbox-inline"><input type="checkbox" name="on_dow[]" value="{{ wd }}" {{ 'checked' if wd|string in p.on_dow else ' ' }}  > {{ weekday[wd] }}</label>
 								{% endfor%}
 							</div>
 
-							<div class="edit-section-label"><label>{{ o.translations.text_OFF }}</label></div>
-							<div>
-								<input type="text" name="off_tod" class="form-control input-sm"  value="{{ p.off_tod }}">
+							<div class="form-row">
+								<div class="col">
+									<div class="edit-section-label"><label>{{ o.translations.text_OFF }} <span class="mdi mdi-thumb-up"></span></label></div>
+									<textarea name="off_tod" class="form-control input-sm"  > {{ p.off_tod }}</textarea>
+								</div>
+								<div class="col">
+									<div class="edit-section-label"><label>{{ o.translations.text_OFF }} <span class="mdi mdi-thumb-down"></label></div>
+									<textarea name="off_tod_false" class="form-control input-sm"  > {{ p.off_tod_false }}</textarea>
+								</div>
 							</div>
 
-							<div>
+							<div class="text-center">
 								{% for wd in range(1, 8): %}
 									<label class="checkbox-inline"><input type="checkbox" name="off_dow[]" value="{{ wd }}" {{ 'checked' if wd|string in p.off_dow else ' ' }}  > {{ weekday[wd] }}</label>
 								{% endfor%}

@@ -158,7 +158,9 @@ def webserver_update():
     type = request.form.get('type')
     if type != 'weekly':
         on_tod = request.form.get('on_tod')
+        on_tod_false = request.form.get('on_tod_false')
         off_tod = request.form.get('off_tod')
+        off_tod_false = request.form.get('off_tod_false')
         on_dow = ""
         off_dow = ""
         for o in request.form.getlist('on_dow[]'):
@@ -204,6 +206,8 @@ def webserver_update():
         data['off_tod'] = off_tod
         data['on_dow'] = on_dow
         data['off_dow'] = off_dow
+        data['on_tod_false'] = on_tod_false
+        data['off_tod_false'] = off_tod_false
     file = simpleschedulerconf.json_folder + sid + '.json'
     with open(file, 'w') as jsonFile:
         json.dump(data, jsonFile)
@@ -239,6 +243,24 @@ def webserver_dirty():
         r = '0'
     return make_response(r, 200)
 
+@app.route("/validatetemplate", methods=['GET'])
+def webserver_validatetemplate():
+    response = ""
+    data = request.args
+    t = data["t"]
+    headers = {'content-type': 'application/json', 'Authorization': 'Bearer ' + simpleschedulerconf.SUPERVISOR_TOKEN}
+    command_url = simpleschedulerconf.HASSIO_URL + "/template"
+    post_data = '{"template":"' + t + '"}'
+    try:
+        r = requests.post(url=command_url, data=post_data, headers=headers, timeout=request_timeout)
+        if r.content:
+            response = r.content.decode().lower()
+        if r.status_code != 200:
+            if "message" in response:
+                json_response = json.loads(r.content)
+                response = json_response['message']
+    finally:
+        return make_response(response, 200)
 
 @app.context_processor
 def utility_processor():
@@ -605,11 +627,12 @@ def get_entity_status(e, check):
 def evaluate_template(t: str):
     opt = get_options()
     response: bool = False
+    content = ""
     headers = {'content-type': 'application/json', 'Authorization': 'Bearer ' + simpleschedulerconf.SUPERVISOR_TOKEN}
     command_url = simpleschedulerconf.HASSIO_URL + "/template"
     post_data = '{"template":"' + t + '"}'
     try:
-        if opt['debug']: printlog("DEBUG: Evaluating template %s" % (t))
+        if opt['debug']: printlog("DEBUG: Evaluating template: %s" % (t))
         r = requests.post(url=command_url, data=post_data, headers=headers, timeout=request_timeout)
         if r.content:
             content = r.content.decode()

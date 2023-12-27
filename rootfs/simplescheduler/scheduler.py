@@ -38,6 +38,8 @@ if __name__ == '__main__':
                     condition = True
                     dont_retry = s.get('dontretry',0)
                     template = s.get('template','')
+                    on_tod_false = s.get('on_tod_false', '')
+                    off_tod_false = s.get('off_tod_false', '')
                     if options['debug']: main.printlog("DEBUG: Parsing [%s]" % s['name'])
                     week_onoff = s.get('weekly')
 
@@ -49,7 +51,16 @@ if __name__ == '__main__':
                         s['off_dow'] = current_dow
 
                     if current_dow in s['on_dow']:
-                        elist = main.get_events_array(s['on_tod'])
+
+                        if template:
+                            condition = main.evaluate_template(template)
+                            main.printlog("SCHED: Evaluating template for [%s]: %s" % (s['name'], condition))
+
+                        if condition:
+                            elist = main.get_events_array(s['on_tod'])
+                        else:
+                            elist = main.get_events_array(on_tod_false)
+
                         for e in elist:
                             value = ""
                             p = e.upper().split('>')
@@ -58,10 +69,6 @@ if __name__ == '__main__':
                                 value = p[1][1:]
                             event_time = main.evaluate_event_time(t, sunrise, sunset)
                             if event_time == current_time:
-                                if template:
-                                    condition = main.evaluate_template(template)
-                                    main.printlog("SCHED: Evaluating template for [%s]: %s" % ( s['name'], condition ) )
-                                if condition:
                                     main.printlog("SCHED: Executing ON actions for [%s]" % s['name'])
                                     main.call_ha(s['entity_id'], "on", value, friendly_name )
                                     for entity in s['entity_id']:
@@ -73,7 +80,12 @@ if __name__ == '__main__':
                                                                                        "countdown": max_retry,"max_retry": max_retry}
 
                     if current_dow in s['off_dow']:
-                        elist = main.get_events_array(s['off_tod'])
+
+                        if condition:
+                            elist = main.get_events_array(s['off_tod'])
+                        else:
+                            elist = main.get_events_array(off_tod_false)
+
                         for e in elist:
                             value = ""
                             p = e.upper().split('>')
