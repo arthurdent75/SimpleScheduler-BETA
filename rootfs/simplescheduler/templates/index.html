@@ -245,6 +245,14 @@
 			}).appendTo($tbody);
 	});
 
+	function toggle_false_condition_section() {
+			t = document.getElementById('template');
+			if (t.value=='') {
+				$('.false_condition_section').each(function() { this.style.display="none"; });
+			} else {
+				$('.false_condition_section').each(function() { this.style.display="block"; });
+			}
+	}
 
 	function toggle_sidebar(){
 		$("#sidebar").hide();
@@ -260,7 +268,9 @@
 				$(".entity-dropdown-fix").each(function( t ) {
 					  this.value = $(this).attr('aria-data');
 					});
-				});
+				toggle_false_condition_section();
+			});
+
     });
 
 	$(document).on('click', '.view-button', function () {
@@ -413,6 +423,11 @@
 			if (r=="1") location.reload();
 		});
 	}, 3000);
+
+
+	$(document).on('keyup', '#template', function () {
+		toggle_false_condition_section();
+	});
 
 	$(document).on('focusout', '#template', function () {
 			t = this.value;

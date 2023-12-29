@@ -403,7 +403,10 @@
         transition: all 1s;
     }
 
-    .col:last-child { margin-left: 0.5em; }
+    .false_condition_section {
+        display: none;
+        margin-left: 0.5em;
+    }
 
 	@media screen and (min-width: 1281px) {
 		html {	font-size: 10pt; }
