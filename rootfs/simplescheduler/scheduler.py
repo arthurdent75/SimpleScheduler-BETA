@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
                         if template:
                             condition = main.evaluate_template(template)
-                            main.printlog("SCHED: Evaluating template for [%s]: %s" % (s['name'], condition))
+                            if options['debug']: main.printlog("DEBUG: Evaluating template for [%s]: %s" % (s['name'], condition))
 
                         if condition:
                             elist = main.get_events_array(s['on_tod'])
