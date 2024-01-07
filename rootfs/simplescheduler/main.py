@@ -15,7 +15,7 @@ import psutil
 import simpleschedulerconf
 
 valid_domains = ["light", "scene", "switch", "script", "camera", "climate", "cover", "vacuum", "fan", "humidifier",
-                 "automation", "input_boolean", "media_player"]
+                 "valve","automation", "input_boolean", "media_player"]
 lwt_topic = "homeassistant/switch/simplescheduler/availability"
 sun_data = ""
 schedulers_list = []
@@ -613,7 +613,7 @@ def get_entity_status(e, check):
         if check:
             altered_response = response
             domain = e.lower().split(".")
-            if domain[0] == 'cover':
+            if domain[0] == 'cover' or domain[0] == 'valve':
                 altered_response = 'on' if response == "open" else 'off'
             if domain[0] == 'climate' and response != 'off':
                 altered_response = 'on'
@@ -719,6 +719,17 @@ def call_ha(eid_list, action, passedvalue, friendly_name):
                         command_url = simpleschedulerconf.HASSIO_URL + "/services/cover/open_cover"
                         command = "Opening"
 
+            if domain[0] == "valve":
+                if value != "":
+                    command_url = simpleschedulerconf.HASSIO_URL + "/services/valve/set_valve_position"
+                    postdata = '{"entity_id":"%s","position":"%s"}' % (eid, value)
+                    command = "Setting"
+                    extra = "position to " + value + '%'
+                else:
+                    if action == "on":
+                        command_url = simpleschedulerconf.HASSIO_URL + "/services/valve/open_valve"
+                        command = "Opening"
+
             if domain[0] == "climate" and value != "":
                 if value[0] == "O":
                     v = value[1:]
@@ -730,6 +741,10 @@ def call_ha(eid_list, action, passedvalue, friendly_name):
         else:
             if domain[0] == "cover":
                 command_url = simpleschedulerconf.HASSIO_URL + "/services/cover/close_cover"
+                command = "Closing"
+
+            if domain[0] == "valve":
+                command_url = simpleschedulerconf.HASSIO_URL + "/services/valve/close_valve"
                 command = "Closing"
 
         printlog("SCHED: %s [%s] %s" % (command, friendly_name.get(eid, eid), extra))

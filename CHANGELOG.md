@@ -1,5 +1,6 @@
 **Version 2.5**
 - New feature: add template condition
+- New feature: add support for VALVE
 - Fix few bugs in frontend
 
 **Version 2.2.1**
