@@ -44,7 +44,8 @@ If you need more advanced features:
 - You can set the temperature of a climate without turning it on. Write **16:30>TO22.5** to set the temperature to 22.5°
 - You can set the humidity of a (de)humidifier. Write **16:30>H65** to set the humidity to 65% 
 - You can set the position of a cover. Write **16:30>P25** will set the cover at 25%  
-- You can set the fan speed. Write **16:30>F25** will turn on the fan at 25%  
+- You can set the fan speed. Write **16:30>F25** will turn on the fan at 25%
+- You can set the valve position. Write **16:30>P25** will set the valve position at 25%  
 - Brightness/Temperature/Position/Speed only works in the "TURN ON" section (obviously)! 
 - It's not mandatory to add both ON and OFF time. You can leave one of them empty if you don't need it. For example, you want to turn off a light every day at 22:00, but you don't need to turn it on.
 - You can also choose to disable a schedule: the schedule will stay there, but it will not be executed until you will enable it back
