@@ -97,6 +97,12 @@ Every schedule (or row, if you prefer) is a JSON file stored in the [share/simpl
 This way the data can "survive" an addon upgrade or reinstallation.
 You can easily backup and restore them in case of failure. In the same way, you can (accidentally?) delete them. So be aware of that.
 
+### Log 
+The log file is stored in the same folder where the JSON file are stored [share/simplescheduler] 
+You can delete it if it become too large, but be sure to stop the addon first.
+You can enable a verbose log by checking the box **debug mode** in the addon configuration.
+When enabled, the log file can easily become very large, so be sure to keep the debug mode on only the required time.
+
 ### Last but not least
 If you want to convince me to stay up at night to work on this, just <a target="_blank" href="https://www.paypal.com/donate/?hosted_button_id=8FN58C8SM9LLW">buy me a beer 🍺</a> \
 You may say that regular people need coffee to do that. Well, I'm not a regular person.
