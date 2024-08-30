@@ -43,6 +43,7 @@ jobs:
             version=$(yq e '.version' config.yaml)
             qemuarch=$arch
             if [ "$arch" = "armv7" ]; then
-              qemuarch="arm/v7"            
+              qemuarch="arm/v7"
+            fi
             docker buildx build --platform $qemuarch -t ghcr.io/arthurdent75/simplescheduler-beta/$arch:$version --push --build-arg BUILD_FROM=$base_image .
           done
