@@ -6,7 +6,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: arthurdent75/simplescheduler-beta
-  ARCHITECTURES: "armv7 amd64 armhf aarch64"  
+  ARCHITECTURES: "armv7 amd64 aarch64"  
   
   
 jobs:
