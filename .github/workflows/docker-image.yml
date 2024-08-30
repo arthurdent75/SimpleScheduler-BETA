@@ -41,9 +41,6 @@ jobs:
           for arch in ${{ env.ARCHITECTURES }}; do
             base_image=$(yq e ".build_from.$arch" build.yaml)
             version=$(yq e '.version' config.yaml)
-            qemuarch=$arch
-            if [ "$arch" = "armv7" ]; then
-              qemuarch="arm/v7"
-            fi
+            [ "$arch" = "armv7" ] && qemuarch="arm/v7" || qemuarch=$arch
             docker buildx build --platform $qemuarch -t ghcr.io/arthurdent75/simplescheduler-beta/$arch:$version --push --build-arg BUILD_FROM=$base_image .
           done
