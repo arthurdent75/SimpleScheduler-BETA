@@ -1,0 +1,49 @@
+name: Build Docker Images
+
+on:
+  push:
+    branches:
+    - "*"
+    tags:
+    - "*"
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: arthurdent75/simplescheduler-BETA
+  ARCHITECTURES: "amd64 armv7 aarch64"  
+  
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+          
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: Build and push Docker images
+        run: |
+          for arch in ${{ env.ARCHITECTURES }}; do
+            base_image=$(yq e ".build_from.$arch" build.yaml)
+            version=$(yq e '.version' config.yaml)
+            docker buildx build --platform $arch -t ghcr.io/arthurdent75/simplescheduler-BETA/$arch:$version --push --build-arg BUILD_FROM=$base_image .
+          done
