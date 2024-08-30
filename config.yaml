@@ -11,6 +11,7 @@ arch:
   - armhf
   - armv7
   - i386
+image: ghcr.io/arthurdent75/simplescheduler-beta/{arch}
 init: false
 homeassistant_api: true
 ingress: true
