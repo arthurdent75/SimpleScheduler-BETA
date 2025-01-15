@@ -50,6 +50,7 @@ If you need more advanced features:
 - It's not mandatory to add both ON and OFF time. You can leave one of them empty if you don't need it. For example, you want to turn off a light every day at 22:00, but you don't need to turn it on.
 - You can also choose to disable a schedule: the schedule will stay there, but it will not be executed until you will enable it back
 - You can **drag the rows to sort them**, so you can keep them organized as you like!
+- Double click on a row to enable/disable the scheduler
 
 Look at the picture above to see all these things in action (and combined!).
 
