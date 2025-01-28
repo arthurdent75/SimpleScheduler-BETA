@@ -8,7 +8,7 @@ codenotary: notary@home-assistant.io
 arch:
   - aarch64
   - amd64
-image: ghcr.io/arthurdent75/simplescheduler-beta
+image: ghcr.io/arthurdent75/simplescheduler-beta/{arch}
 init: false
 homeassistant_api: true
 ingress: true
