@@ -50,7 +50,7 @@ jobs:
         uses: docker/build-push-action@v6.13.0
         id: docker_build
         with:
-          context: home-assistant-addon-proxy
+          context: home-assistant-simplescheduler-addon
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           labels: |
