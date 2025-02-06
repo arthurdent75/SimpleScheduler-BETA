@@ -1,5 +1,5 @@
 ---
-version: "2.6b3"
+version: "2.6.4"
 name: Simple Scheduler (BETA)
 description: Simple timer on weekly base
 slug: simplescheduler
