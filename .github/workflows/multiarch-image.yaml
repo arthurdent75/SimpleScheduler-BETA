@@ -27,7 +27,7 @@ jobs:
         shell: bash
         run: |
           VERSION=$(yq e '.version' config.yaml)
-          BASE_TAG="SimpleScheduler-BETA"
+          BASE_TAG="simplescheduler-beta"
           VERSION_TAG="${BASE_TAG}:${VERSION}"
           LATEST_TAG="${BASE_TAG}:latest"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT          
