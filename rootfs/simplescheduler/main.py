@@ -43,7 +43,8 @@ def webserver_home():
                            friendlynames=get_switch_friendly_names(),
                            sort=get_sort_list(),
                            weekday=weekday,
-                           statusbarinfo=get_statusbar_info()
+                           statusbarinfo=get_statusbar_info(),
+                           groups=get_groups()
                            )
 
 
@@ -97,6 +98,8 @@ def webserver_update_json():
     if f=="enabled": v=int(v)
     result=update_json_file(sid,f,v)
     r = '1' if result else '0'
+    if options['MQTT']['enabled']:
+        mqtt_send_config(mqttclient)
     return make_response(r, 200)
 
 
@@ -345,7 +348,7 @@ def utility_processor():
     return dict(get_friendly_html_dow=get_friendly_html_dow)
 
 
-def on_connect(client, userdata, flags, rc):
+def on_connect(client, userdata, flags, rc,properties):
     if rc == 0:
         printlog("STATUS: MQTT connected! ")
         client.publish(lwt_topic, payload="online", qos=0, retain=True)
@@ -386,7 +389,7 @@ def get_statusbar_info():
     pid = get_scheduler_pid()
     if pid > 0:
         r['scheduler'] = "Running (PID %s)" % pid
-    if options['MQTT']['enabled']:
+    if options['MQTT']['enabled'] and mqttclient is not None:
         r['mqtt'] = "Connected" if mqttclient.is_connected() else "Disconnected"
     return r
 
@@ -598,15 +601,27 @@ def get_sort_list():
             i = i + 1
     return sorting
 
+def get_groups():
+    g = ""
+    group_file_path = simpleschedulerconf.json_folder + "group.dat"
+    if os.path.exists(group_file_path):
+        with open(group_file_path, "r") as group_file:
+            g = json.load(group_file)
+    return g
 
 def save_sort_list(data):
     idlist = []
     for el in data:
-        idlist.append(data[el])
+        if el == "groups":
+            json_groups = data[el]
+        else:
+            idlist.append(data[el])
     jsonlist = json.loads('{"id_order":[]}')
     jsonlist['id_order'] = idlist
     with open(simpleschedulerconf.json_folder + "sort.dat", "w") as sort_file:
         json.dump(jsonlist, sort_file)
+    with open(simpleschedulerconf.json_folder + "group.dat", "w") as group_file:
+        group_file.write(json_groups)
     return True
 
 
@@ -999,7 +1014,7 @@ if __name__ == '__main__':
 
     if options['MQTT']['enabled']:
         printlog('STATUS: Starting MQTT')
-        mqttclient = mqtt.Client(client_id="SimpleScheduler", clean_session=False)
+        mqttclient = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2,client_id="SimpleScheduler", clean_session=False)
         mqttclient.on_connect = on_connect
         mqttclient.on_message = on_message
         mqttclient.will_set(lwt_topic, payload="offline", qos=0, retain=True)

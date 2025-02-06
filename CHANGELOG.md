@@ -1,3 +1,9 @@
+**Version 2.6 beta3**
+- New feature: group scheduler in frontend
+- Update base image
+- Update mqtt-paho version
+- Bugfix
+
 **Version 2.6**
 - New feature: add support for BUTTON
 - New feature: double click on row to enable/disable scheduler (#165)
