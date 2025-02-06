@@ -1,4 +1,3 @@
-ARG BUILD_FROM
 FROM ghcr.io/hassio-addons/debian-base:7.7.0
 
 # Update Packages
