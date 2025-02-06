@@ -9,7 +9,6 @@ arch:
   - aarch64
   - amd64
   - armv7
-image: ghcr.io/arthurdent75/simplescheduler-beta  
 init: false
 homeassistant_api: true
 ingress: true
