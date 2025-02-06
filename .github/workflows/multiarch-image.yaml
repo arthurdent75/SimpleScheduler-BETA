@@ -53,16 +53,24 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.extract_info.outputs.version }}          
           labels: |
             org.opencontainers.image.title=SimpleScheduler Addon
-            org.opencontainers.image.vendor=SimpleScheduler Project
+            org.opencontainers.image.description="A Home Assistant AddOn to schedule entities on/off on a weekly basis"
+            org.opencontainers.image.vendor=SimpleScheduler Addon
             org.opencontainers.image.authors=arthurdent75
-            org.opencontainers.image.url=https://github.com/arthurdent75/SimpleScheduler
-            org.opencontainers.image.source=https://github.com/arthurdent75/SimpleScheduler
+            org.opencontainers.image.url=https://github.com/arthurdent75/simplescheduler
+            org.opencontainers.image.source=https://github.com/arthurdent75/simplescheduler
             org.opencontainers.image.version=${{ steps.extract_info.outputs.version }}
             io.hass.name=SimpleScheduler Addon
             io.hass.url=https://github.com/arthurdent75/simplescheduler
             io.hass.version=${{ steps.extract_info.outputs.version }}
             io.hass.type=addon
             io.hass.arch=armv7|aarch64|amd64
+          annotations: |
+            org.opencontainers.image.title=SimpleScheduler Addon
+            org.opencontainers.image.description="A Home Assistant AddOn to schedule entities on/off on a weekly basis"
+            org.opencontainers.image.vendor=SimpleScheduler Addon
+            org.opencontainers.image.authors=arthurdent75
+            org.opencontainers.image.version=${{ steps.extract_info.outputs.version }}
+            org.opencontainers.image.url=https://github.com/arthurdent75/simplescheduler           
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}           
