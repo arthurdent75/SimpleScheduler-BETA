@@ -53,7 +53,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.extract_info.outputs.version }}          
           labels: |
             org.opencontainers.image.title=SimpleScheduler Addon
-            org.opencontainers.image.description="A Home Assistant AddOn to schedule entities on/off on a weekly basis"
+            org.opencontainers.image.description="A Home Assistant AddOn to schedule entities on/off"
             org.opencontainers.image.vendor=SimpleScheduler Addon
             org.opencontainers.image.authors=arthurdent75
             org.opencontainers.image.url=https://github.com/arthurdent75/simplescheduler
@@ -66,11 +66,12 @@ jobs:
             io.hass.arch=armv7|aarch64|amd64
           annotations: |
             org.opencontainers.image.title=SimpleScheduler Addon
-            org.opencontainers.image.description="A Home Assistant AddOn to schedule entities on/off on a weekly basis"
+            org.opencontainers.image.description="A Home Assistant AddOn to schedule entities on/off"
             org.opencontainers.image.vendor=SimpleScheduler Addon
             org.opencontainers.image.authors=arthurdent75
             org.opencontainers.image.version=${{ steps.extract_info.outputs.version }}
-            org.opencontainers.image.url=https://github.com/arthurdent75/simplescheduler           
+            org.opencontainers.image.url=https://github.com/arthurdent75/simplescheduler              
+         
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}           
