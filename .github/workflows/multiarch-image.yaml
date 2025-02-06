@@ -27,12 +27,7 @@ jobs:
         shell: bash
         run: |
           VERSION=$(yq e '.version' config.yaml)
-          BASE_TAG="simplescheduler-beta"
-          VERSION_TAG="${BASE_TAG}:${VERSION}"
-          LATEST_TAG="${BASE_TAG}:latest"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT          
-          echo "version_tag=${VERSION_TAG}" >> $GITHUB_OUTPUT
-          echo "latest_tag=${LATEST_TAG}" >> $GITHUB_OUTPUT
           
       - name: Docker meta
         id: meta
@@ -53,7 +48,9 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
-          tags: ghcr.io/arthurdent75/simplescheduler-beta:latest
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.extract_info.outputs.version }}          
           labels: |
             org.opencontainers.image.title=SimpleScheduler Addon
             org.opencontainers.image.vendor=SimpleScheduler Project
@@ -62,7 +59,7 @@ jobs:
             org.opencontainers.image.source=https://github.com/arthurdent75/SimpleScheduler
             org.opencontainers.image.version=${{ steps.extract_info.outputs.version }}
             io.hass.name=SimpleScheduler Addon
-            io.hass.url=https://github.com/arthurdent75/SimpleScheduler
+            io.hass.url=https://github.com/arthurdent75/simplescheduler
             io.hass.version=${{ steps.extract_info.outputs.version }}
             io.hass.type=addon
             io.hass.arch=armv7|aarch64|amd64
