@@ -31,7 +31,7 @@ Choose one or more entities from the dropdown, fill in the ON time (in 24-hour f
 
 - You can set **multiple times** in the same scheduler: just enter them in the ON/OFF field separated by spaces.  
 - It's not mandatory to add both ON and OFF time. You can leave one of them empty if you don't need it. For example, you want to turn off a light every day at 22:00, but you don't need to turn it on.
-- You can use the words **sunrise** and **sunset**; if needed, you can add an offset (in minutes). Sunset and Sunrise times are recalculated every day at midnight and are reported in the status bar. Some examples: **sunrise+30** is executed 30 minutes after sunrise; **sunset-60** is executed 1 hour before the sunset.
+- You can use the words **sunrise** and **sunset** instead of *hh:mm*; if needed, you can add an offset (in minutes). Sunset and Sunrise times are recalculated every day at midnight and are reported in the status bar. Some examples: **sunrise+30** is executed 30 minutes after sunrise; **sunset-60** is executed 1 hour before the sunset.
 - You can **drag the rows to sort them**, so you can keep them organized as you like!
 - You can also choose to **disable a schedule**: the schedule will stay there, but it will not be executed until you enable it back. You can double-click on a row to quickly enable/disable the scheduler.
 - You can **organize schedulers in groups**, that can be expanded and collapsed as you like. You can open, close, drag, disable, rename, and delete them.
