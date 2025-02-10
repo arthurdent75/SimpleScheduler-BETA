@@ -36,7 +36,7 @@ Choose one or more entities from the dropdown, fill in the ON time (in 24-hour f
 - You can also choose to **disable a schedule**: the schedule will stay there, but it will not be executed until you enable it back. You can double-click on a row to quickly enable/disable the scheduler.
 - You can **organize schedulers in groups**, that can be expanded and collapsed as you like. You can open, close, drag, disable, rename, and delete them.
 
-## Feature
+## Features
 
 | **Entity** | **ON action** | **OFF action** | **Extra features** |
 |:---|:---:|:---:|:-----|
