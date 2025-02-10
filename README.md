@@ -100,12 +100,12 @@ Rewrite the words you would like to have in your language and restart the addon.
 For the weekdays, as you can easily understand, only the first two chars are used.
 
 ### Two words about the stored data
-Every schedule (or row, if you prefer) is a JSON file stored in the [share/simplescheduler] folder under the SAMBA share.
+Every schedule (or row, if you prefer) is a JSON file stored in the [/share/simplescheduler] folder under the SAMBA share.
 This way the data can "survive" an addon upgrade or reinstallation.
 You can easily backup and restore them in case of failure. In the same way, you can (accidentally?) delete them. So be aware of that.
 
 ### Log 
-The log file is stored in the same folder where the JSON files are stored [share/simplescheduler] 
+The log file is stored in the same folder where the JSON files are stored [/share/simplescheduler] 
 You can delete it if it becomes too large, but be sure to stop the addon first.
 You can enable a verbose log by checking the box **debug mode** in the addon configuration.
 When enabled, the log file can easily become very large, so be sure to keep the debug mode on only the required time.
