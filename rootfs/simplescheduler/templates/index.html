@@ -57,12 +57,12 @@
 					{% if groups %}
 					{% for key, group in groups.items() %}
 					   {% set group_id = "group-" + key %}
-						<tr data-value="{{ group_id }}" class="row-is-group" data-group="{{ key }}" data-order="{{ sort[group_id] }}" style="opacity: 1;">
+						<tr data-value="{{ group_id }}" class="row-is-group" data-group="{{ key }}" data-order="{{ sort[group_id] }}" style="opacity: 1;"  {% if group.closed %}start-closed{% endif %}  >
 							<td colspan="5">
-								<span class="group-icon">▼</span>
+								<span class="group-icon"><span class="mdi mdi-18px mdi-triangle mdi-rotate-180" ></span></span>
 								<span class="group-name">{{ group.name }}</span>
-								<span class="group-rename"><span class="mdi mdi-18px mdi-pencil " ></span>
-								<span class="group-delete"><span class="mdi mdi-18px mdi-delete" ></span>
+								<span class="group-rename"><span class="mdi mdi-18px mdi-pencil " ></span></span>
+								<span class="group-delete"><span class="mdi mdi-18px mdi-delete" ></span></span>
 							</td>
 						</tr>
 					{% endfor %}
@@ -84,16 +84,16 @@
 
 						  <tr data-value="{{ s.id }}" data-order="{{ sort[s.id] }}" class="row-is-item {% if group_id %}row-in-group{% endif %}" style="opacity: {{ '1' if s.enabled else '0.3' }}" {% if group_id %}data-group="{{ group_id }}"{% endif %}>
 							  {% if s.weekly %}
-							  <td class="text-center drag_icon fit"> <span class="mdi mdi-calendar-range mdi-24px" ></span> </td>
+							  <td class="text-left drag_icon fit"> <span class="mdi mdi-calendar-range mdi-24px" ></span> </td>
 							  {% elif s.recurring %}
-							  <td class="text-center drag_icon fit"><span class="mdi mdi-calendar-refresh mdi-24px" ></span></td>
+							  <td class="text-left drag_icon fit"> <span class="mdi mdi-calendar-refresh mdi-24px" ></span> </td>
 							  {% else %}
-							  <td class="text-center drag_icon fit"><span class="mdi mdi-calendar-week mdi-24px" ></span></td>
+							  <td class="text-left drag_icon fit"> <span class="mdi mdi-calendar-week mdi-24px" ></span> </td>
 							  {% endif %}
 
-							  <td class="text-center fit">{% if s.template %}<span class="mdi mdi-directions-fork mdi-24px" ></span>{% endif %}</span></td>
+							  <td class="text-left fit">{% if s.template %}<span class="mdi mdi-directions-fork mdi-24px" ></span>{% endif %}</span></td>
 
-							  <td class="text-center fit" >
+							  <td class="text-left fit" >
 								<button type="button" class="btn btn-default bg-primary edit-button" aria-id="{{ s.id }}" ><span class="mdi mdi-pencil" ></span></button>
 								<button type="button" class="btn btn-default bg-primary view-button" aria-id="{{ s.id }}" ><span class="mdi mdi-eye" ></span></button>
 							  </td>
@@ -228,7 +228,6 @@
 				<span class="statusbar_span"><span class="mdi mdi-weather-sunset-up" ></span> {{ statusbarinfo.sunrise }}</span>
 				<span class="statusbar_span"><span class="mdi mdi-weather-sunset-down" ></span> {{ statusbarinfo.sunset }}</span>
 				<span class="statusbar_span"><span class="mdi mdi-map-clock-outline" ></span> {{ statusbarinfo.timezone }}</span>
-				<span class="statusbar_span"><span class="mdi mdi-calendar-clock" ></span> {{ statusbarinfo.scheduler }}</span>
 				<span class="statusbar_span">MQTT: {{ statusbarinfo.mqtt }}</span>
 
 			</p>
@@ -276,11 +275,14 @@
             let dataValue = $row.attr('data-value');
             let dataGroup = $row.attr('data-group');
             let groupName = $row.find('span.group-name').text().trim();
+            // let icon = $(t).find(".group-icon > .mdi");
+			let closed = $row.find(".group-icon > .mdi").hasClass("mdi-rotate-90");
 
             if (dataGroup) {
                 if (!groups[dataGroup]) {
                     groups[dataGroup] = {
                         name: groupName,
+                        closed: closed,
                         values: []
                     };
                 }
@@ -295,6 +297,38 @@
 		return encodeURIComponent(jsonString);
 	}
 
+	function toggleGroup(t) {
+		let group = $(t).attr("data-group");
+		let rows = $(`.row-in-group[data-group='${group}']`);
+		let icon = $(t).find(".group-icon > .mdi");
+
+		if (rows.is(":visible")) {
+			rows.hide();
+			icon.removeClass("mdi-rotate-180").addClass("mdi-rotate-90");
+		} else {
+			rows.show();
+			icon.removeClass("mdi-rotate-90").addClass("mdi-rotate-180");
+		}
+		sendSortData();
+	}
+
+	function openGroup(t) {
+		let group = $(t).attr("data-group");
+		let rows = $(`.row-in-group[data-group='${group}']`);
+		let icon = $(t).find(".group-icon > .mdi");
+		rows.show();
+		icon.removeClass("mdi-rotate-90").addClass("mdi-rotate-180");
+		sendSortData();
+	}
+
+	function closeGroup(t) {
+		let group = $(t).attr("data-group");
+		let rows = $(`.row-in-group[data-group='${group}']`);
+		let icon = $(t).find(".group-icon > .mdi");
+		rows.hide();
+		icon.removeClass("mdi-rotate-180").addClass("mdi-rotate-90");
+		sendSortData();
+	}
 
 	$( document ).ready(function() {
 
@@ -325,10 +359,7 @@
 						},
                 start: function(event, ui) {
                     if (ui.item.hasClass("row-is-group")) {
-                        let group = ui.item.attr("data-group");
-                        let rows = $(`tr[data-group='${group}']`).not(".row-is-group");
-                        rows.hide();
-                        ui.item.find(".group-icon").text("▶");
+                        closeGroup(ui.item);
                     }
                 }
 			}).disableSelection();
@@ -340,6 +371,11 @@
 					   : tda < tdb ? -1
 					   : 0;
 			}).appendTo($tbody);
+
+		    $("tr.row-is-group[start-closed]").each(function () {
+        		closeGroup(this);
+    		});
+
 
 	});
 
@@ -362,28 +398,20 @@
 		let id = generateGroupId();
 		let newRow = $(`<tr data-value='group-${id}' class='row-is-group' data-group='${id}'>
 			<td colspan='5'>
-				<span class='group-icon'>▼</span>
+				<span class="group-icon"><span class="mdi mdi-18px mdi-triangle mdi-rotate-180" ></span></span>
 				<span class='group-name'>Group ${id}</span>
-				<span class='group-rename'>✏️</span>
-				<span class='group-delete'>🗑️</span>
-			</td>
+				<span class="group-rename"><span class="mdi mdi-18px mdi-pencil " ></span></span>
+				<span class="group-delete"><span class="mdi mdi-18px mdi-delete" ></span></span>
+				</td>
 		</tr>`);
 		$("#dtable tbody").prepend(newRow);
 		updateOrder();
 		sendSortData();
 	});
 
-	$(document).on("click", ".row-is-group", function() {
-		let group = $(this).attr("data-group");
-		let rows = $(`.row-in-group[data-group='${group}']`);
-		let icon = $(this).find(".group-icon");
-		if (rows.is(":visible")) {
-			rows.hide();
-			icon.text("▶");
-		} else {
-			rows.show();
-			icon.text("▼");
-		}
+	$(document).on("click", ".group-icon", function() {
+		let tr = this.closest("tr");
+		toggleGroup(tr);
 	});
 
 	$(document).on("click", ".group-rename", function(event) {
@@ -633,21 +661,32 @@
 			new TomSelect('#' + elementId, settings);
 	});
 
-	$(document).on('dblclick', '.ui-sortable-handle', function () {
-			id=$(this).attr('data-value');
-			row = $(this)[0]
-			o=row.style.opacity;
+	$(document).on('dblclick', '.row-is-item', function () {
+			toggleDisabled(this);
+	});
+
+	function toggleDisabled(tr) {
+			id=$(tr).attr('data-value');
+			o=tr.style.opacity;
 			V = (o=="0.3") ? '1' : '0';
 
 			$.get('update_json', { id: id, f: 'enabled' ,v: V }, function(response) {
 					if (response == '1') {
 						if (V=='0') V="0.3";
-						row.style.opacity=V;
+						tr.style.opacity=V;
 					}
 			});
+	}
 
 
+	$(document).on('dblclick', '.row-is-group', function () {
+			let group = $(this).attr("data-group");
+			let rows = $(`.row-in-group[data-group='${group}']`);
+			rows.each( function () {
+				toggleDisabled(this);
+			});
 	});
+
 </script>
 
 

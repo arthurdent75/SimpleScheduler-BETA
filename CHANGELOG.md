@@ -1,8 +1,10 @@
-**Version 2.6 beta3**
+**Version 2.9.1 beta**
 - New feature: group scheduler in frontend
-- Update base image
-- Update mqtt-paho version
-- Bugfix
+- New feature: add support for INPUT_BUTTON
+- Update addon base image
+- Update paho-mqtt version
+- Threading architecture
+- A lot of bugfix
 
 **Version 2.6**
 - New feature: add support for BUTTON
