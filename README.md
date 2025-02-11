@@ -51,7 +51,7 @@ Choose one or more entities from the dropdown, fill in the ON time (in 24-hour f
 | vacuum | START | HOME |  |
 | media_player | PLAY | STOP |  |
 | script | EXECUTE | STOP |  |
-| scene |  |  |  |
+| scene | ON | *ignored* |  |
 | camera | ON | OFF |  |
 | automation | ENABLE | DISABLE |  |
 | input_boolean | ON | OFF |  |
