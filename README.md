@@ -38,7 +38,7 @@ Choose one or more entities from the dropdown, fill in the ON time (in 24-hour f
 
 ## Features
 
-| **Entity** | **ON action** | **OFF action** | **Extra features** |
+| **Entity** | **ON action** | **OFF action** | **Extra features**** |
 |:---|:---:|:---:|:-----|
 | light | ON | OFF | **Brightness (%)**<br>*e.g: set brightness to 30%* <br>`hh:mm>B30`<br><br> **Brightness (absolute)**<br>*e.g: set absolute brightness to 200*<br> `hh:mm>BA200`<br> <br> **Color (hex)**<br>*e.g: set brightness to 75% and color to orange*<br> `hh:mm>B75\|FFA500`<br><br> **Color temp. (&deg;K)**<br>*e.g: set brightness to 20% and color temperature to 4700&deg;K* <br> `hh:mm>B20\|K4700` <br> |
 | cover | OPEN | CLOSE | **Percent (%)**<br>*e.g: open cover to 50%* <br>`hh:mm>P50` |
@@ -48,16 +48,17 @@ Choose one or more entities from the dropdown, fill in the ON time (in 24-hour f
 | humidifier | ON | OFF | **Humidity (&deg;)**<br>*e.g: turn on the (de)humidifier and set the humidity to 55%* <br>`hh:mm>H55` |
 | switch | ON | OFF |  |
 | button | PRESS | - |  |
+| input_button | PRESS | - |  |
 | vacuum | START | HOME |  |
-| media_player | PLAY | STOP |  |
-| script | EXECUTE | STOP |  |
+| media_player | ON | OFF |  |
+| script | RUN | STOP |  |
 | scene | ON | - |  |
 | camera | ON | OFF |  |
 | automation | ENABLE | DISABLE |  |
 | input_boolean | ON | OFF |  |
-| input_button | ON | OFF |  |
 
-*Extra feature (obviously) works in the "TURN ON" section only!*
+
+***Extra feature (obviously) works in the "TURN ON" section only!*
 
 ### Conditions
 For each scheduler, you can add a condition that will be checked at the time of the execution.
