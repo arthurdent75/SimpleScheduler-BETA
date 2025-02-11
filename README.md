@@ -47,11 +47,11 @@ Choose one or more entities from the dropdown, fill in the ON time (in 24-hour f
 | climate | ON | OFF | **Temperature**<br>*e.g: turn on the climate and set temperature to 22.5&deg;* <br>`hh:mm>T22.5`<br><br> **Temperature Only**<br>*e.g: just set temperature to 20.7&deg;* <br>`hh:mm>TO20.7` |
 | humidifier | ON | OFF | **Humidity (&deg;)**<br>*e.g: turn on the (de)humidifier and set the humidity to 55%* <br>`hh:mm>H55` |
 | switch | ON | OFF |  |
-| button | PRESS | *ignored* |  |
+| button | PRESS | - |  |
 | vacuum | START | HOME |  |
 | media_player | PLAY | STOP |  |
 | script | EXECUTE | STOP |  |
-| scene | ON | *ignored* |  |
+| scene | ON | - |  |
 | camera | ON | OFF |  |
 | automation | ENABLE | DISABLE |  |
 | input_boolean | ON | OFF |  |
