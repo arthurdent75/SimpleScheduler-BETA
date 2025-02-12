@@ -34,7 +34,7 @@ Choose one or more entities from the dropdown, fill in the ON time (in 24-hour f
 - You can use the words **sunrise** and **sunset** instead of *hh:mm*; if needed, you can add an offset (in minutes). Sunset and Sunrise times are recalculated every day at midnight and are reported in the status bar. Some examples: **sunrise+30** is executed 30 minutes after sunrise; **sunset-60** is executed 1 hour before the sunset.
 - You can **drag the rows to sort them**, so you can keep them organized as you like!
 - You can also choose to **disable a schedule**: the schedule will stay there, but it will not be executed until you enable it back. You can double-click on a row to quickly enable/disable the scheduler.
-- You can **organize schedulers in groups**, that can be expanded and collapsed as you like. You can open, close, drag, disable, rename, and delete them.
+- You can **organize schedulers in groups**, that can be expanded and collapsed as you like. You can open, close, drag, disable, rename, and delete them. Add a schedule to a group by dragging it over and remove it by dragging it out. If you delete a group, the schedulers inside the group will not be deleted.
 
 ## Features
 
@@ -58,23 +58,25 @@ Choose one or more entities from the dropdown, fill in the ON time (in 24-hour f
 | input_boolean | ON | OFF |  |
 
 
-***Extra feature (obviously) works in the "TURN ON" section only!*
+***Extra features (obviously) works only in the "TURN ON" section !*
 
 ### Conditions
-For each scheduler, you can add a condition that will be checked at the time of the execution.
+For each scheduler, you can add a condition that will be checked.
 If the condition is 'true' the action will be performed and (obviously) it won't be executed if the condition is 'false'.
-The condition is a template expression that you can add in the "template" field.
+The condition is a template expression you can add to the "template" field.
 If the field is empty, no check will be performed and the action will always be executed. \
-The template expression **must return a boolean** ('True' or 'False'). \
-So be sure to "convert" switches, lights, and any other entity states to boolean. A few examples:
+The template expression **must return a boolean** ('True' or 'False'). Be sure to "convert" switches, lights, and any other entity states to boolean. \
+It is strongly advised to set a default with `default('true')` or `default('false')` to avoid errors in case the entity becomes unavailable. \
+A few examples:
 ``` 
-{{  states('switch.my_switch') | bool }}
-{{  not states('light.my_light') | bool }}
-{{  states('sensor.room_temperature') | float > 23.5   }}
-{{  is_state('person.my_kid', 'not_home')  }}
-{{  states('sensor.room_temperature') | float > 23.5 and is_state('sun.sun', 'above_horizon')  }}
+{{  states('switch.my_switch') | default('false') | bool }}
+{{  not states('light.my_light') | default('false') | bool }}
+{{  states('sensor.room_temperature') | default('22') | float > 23.5   }}
+{{  is_state('person.my_kid', 'not_home') | default('true') | bool  }}
+{{  states('sensor.room_temperature') | default('22') | float > 23.5
+      and is_state('sun.sun', 'above_horizon') | default('true') | bool  }}
 ``` 
-If the template returns 'on', 'open', 'home', 'armed', '1', and so on,  it will all be treated as 'False'. \
+If the template returns '*on*', '*open*', '*home*', '*armed*', '*1*', and so on,  it will all be treated as 'False'. \
 If the template expression has syntax errors it will be considered 'false', and it will be reported in the addon log.\
 Use the template render utility in Developer Tools to test the condition before putting it into the scheduler.
 
