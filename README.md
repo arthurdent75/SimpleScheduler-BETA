@@ -51,7 +51,7 @@ Choose one or more entities from the dropdown, fill in the ON time (in 24-hour f
 | input_button | PRESS | - |  |
 | vacuum | START | HOME |  |
 | media_player | ON | OFF |  |
-| script | RUN | STOP |  |
+| script | RUN | STOP |  **Parameters**<br>*send parameters (JSON) to the script* <br>`hh:mm>P{"field 1":"value 1",...,"field n":"value n",}` |
 | scene | ON | - |  |
 | camera | ON | OFF |  |
 | automation | ENABLE | DISABLE |  |
