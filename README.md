@@ -80,6 +80,10 @@ If the template returns '*on*', '*open*', '*home*', '*armed*', '*1*', and so on,
 If the template expression has syntax errors it will be considered 'false', and it will be reported in the addon log.\
 Use the template render utility in Developer Tools to test the condition before putting it into the scheduler.
 
+### Failure notification 
+If a schedule was not able to execute the action, it can send you a notification, using one of the notifier available in your setup. You can activate it in the addon configuration by selecting a notifier from the **notify on error** dropdown, otherwise you must select the entry "*disabled*". Choose the native notifier "*persistent_notification*" to receive the  message in frontend. 
+This addon does not allow the addition or configuration of a notifier. This operation must be performed in Home Assistant. More info here: https://www.home-assistant.io/integrations/notify/
+
 ### Frontend switch to enable/disable (with MQTT)
 If you want to enable/disable schedulers in the front end and/or automation, you can achieve that through MQTT.
 This feature is disabled by default because it requires a working MQTT server (broker) and Home Assistant MQTT integration.
