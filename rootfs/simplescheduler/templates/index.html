@@ -293,7 +293,7 @@
         });
 
         let jsonString =  JSON.stringify(groups);
-		console.log(jsonString);
+		// console.log(jsonString);
 		return encodeURIComponent(jsonString);
 	}
 
@@ -393,6 +393,9 @@
 		$("body").css('overflow','auto');
 	}
 
+	$(document).on('click', '.name_col , .event-cell', function () {
+			toggle_sidebar();
+	});
 
 	$("#add-group").click(function() {
 		let id = generateGroupId();

@@ -16,6 +16,8 @@ import psutil
 import time
 import uuid
 import threading
+import re
+import base64
 
 import simpleschedulerconf
 
@@ -292,6 +294,7 @@ def utility_processor():
         if not value: return ''
         result: str = ""
         extra: str = ""
+        value = encode_braces_to_base32(value)
         events = value.upper().replace(',', ' ').replace(';', ' ').split(" ")
 
         for e in events:
@@ -329,7 +332,8 @@ def utility_processor():
                         extra = '<span class="event-type-b"><i class="mdi mdi-lightbulb" aria-hidden="true"></i>' + brightness + extrainfo + '</span>'
                     else:
                         extra = '<span class="event-type-b"><i class="mdi mdi-lightbulb" aria-hidden="true"></i>' + brightness + '%' + extrainfo + '</span>'
-
+                if prefix == 'J':
+                    extra = ' <span class="event-type-j"> <i class="mdi mdi-code-json" aria-hidden="true"></i></span>'
             if t: result += '<span>' + t + extra + '</span >'
 
         return result
@@ -777,6 +781,13 @@ def call_ha(eid_list, action, passedvalue, friendly_name):
                 command_url = simpleschedulerconf.HASSIO_URL + "/services/vacuum/start"
                 command = "Starting"
 
+            if domain[0] == "script" and value != "":
+                params = base64.b32decode(passedvalue).decode()
+                command_url = simpleschedulerconf.HASSIO_URL + "/services/script/"+eid.replace("script.","")
+                postdata = params
+                command = "Executing"
+                extra = "with params " + params
+
         else:
 
             if domain[0] == "vacuum":
@@ -868,7 +879,6 @@ def get_notifiers():
             printlog("ERROR: Something went wrong getting notifiers - " % (response))
     except:
         printlog("ERROR: Something went wrong getting notifiers" )
-
     return notifiers
 
 
@@ -884,7 +894,15 @@ def is_a_retry_domain(entity):
     return response
 
 
+def encode_braces_to_base32(s):
+    def encode_match(match):
+        encoded = base64.b32encode(match.group(0).encode()).decode()
+        return encoded
+    return re.sub(r'\{.*?\}', encode_match, s)
+
+
 def get_events_array(s):
+    s = encode_braces_to_base32(s)
     s = s.upper().replace(',', ' ').replace(';', ' ').strip()
     s = re.sub(' +', ' ', s)
     events = s.split(' ')
