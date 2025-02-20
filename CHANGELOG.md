@@ -1,11 +1,12 @@
-**Version 2.9.4 beta**
+**Version 2.9.5 beta**
 - New feature: group scheduler in frontend
 - New feature: add support for INPUT_BUTTON
 - New feature: call script with parameters
-- No need to restart to enable/disable MQTT
-- Update addon base image
-- Update paho-mqtt version
+- Update addon base image with multi-architecture support
+- Faster download: reduced image size by 85%
 - Threading architecture
+- Update paho-mqtt version
+- No need to restart add-on to enable/disable MQTT
 - A lot of bugfix
 
 **Version 2.6**

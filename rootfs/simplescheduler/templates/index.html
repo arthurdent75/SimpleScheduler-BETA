@@ -44,10 +44,10 @@
 					<tr>
 					  <th scope="col" colspan="5" >
 						  <span class="titlebar_span" id="title">SimpleScheduler</span>
-						  <span class="titlebar_span" id="show-add"><button type="button" class="btn btn-default bg-white main-color" ><span class="mdi mdi-plus"></span></button></span>
-						  <span class="titlebar_span" id="add-group"><button type="button" class="btn btn-default bg-white main-color"><span class="mdi mdi-format-list-group-plus"></span></button></span>
-						  <span class="titlebar_span" id="show-log"><button type="button" class="btn btn-default bg-white main-color" ><span class="mdi mdi-file-document-outline" ></span></button></span>
-						  <span class="titlebar_span" id="show-config"><button type="button" class="btn btn-default bg-white main-color" ><span class="mdi mdi-cog-outline"></span></button></span>
+						  <span class="titlebar_span" id="show-add" title="New scheduler"><button type="button" class="btn btn-default bg-white main-color" ><span class="mdi mdi-plus"></span></button></span>
+						  <span class="titlebar_span" id="add-group" title="New group"><button type="button" class="btn btn-default bg-white main-color"><span class="mdi mdi-format-list-group-plus"></span></button></span>
+						  <span class="titlebar_span" id="show-log" title="Show log"><button type="button" class="btn btn-default bg-white main-color" ><span class="mdi mdi-file-document-outline" ></span></button></span>
+						  <span class="titlebar_span" id="show-config" title="Edit config"><button type="button" class="btn btn-default bg-white main-color" ><span class="mdi mdi-cog-outline"></span></button></span>
 
 					  </th>
 					</tr>
@@ -58,11 +58,11 @@
 					{% for key, group in groups.items() %}
 					   {% set group_id = "group-" + key %}
 						<tr data-value="{{ group_id }}" class="row-is-group" data-group="{{ key }}" data-order="{{ sort[group_id] }}" style="opacity: 1;"  {% if group.closed %}start-closed{% endif %}  >
-							<td colspan="5">
+							<td colspan="5" title="Drag a scheduler over to add it to the group. Drag it away to remove it">
 								<span class="group-icon"><span class="mdi mdi-18px mdi-triangle mdi-rotate-180" ></span></span>
 								<span class="group-name">{{ group.name }}</span>
-								<span class="group-rename"><span class="mdi mdi-18px mdi-pencil " ></span></span>
-								<span class="group-delete"><span class="mdi mdi-18px mdi-delete" ></span></span>
+								<span class="group-rename" title="Rename group"><span class="mdi mdi-18px mdi-pencil " ></span></span>
+								<span class="group-delete" title="Delete group"><span class="mdi mdi-18px mdi-delete" ></span></span>
 							</td>
 						</tr>
 					{% endfor %}
@@ -84,18 +84,18 @@
 
 						  <tr data-value="{{ s.id }}" data-order="{{ sort[s.id] }}" class="row-is-item {% if group_id %}row-in-group{% endif %}" style="opacity: {{ '1' if s.enabled else '0.3' }}" {% if group_id %}data-group="{{ group_id }}"{% endif %}>
 							  {% if s.weekly %}
-							  <td class="text-left drag_icon fit"> <span class="mdi mdi-calendar-range mdi-24px" ></span> </td>
+							  <td class="text-left drag_icon fit" title="Weekly"> <span class="mdi mdi-calendar-range mdi-24px" ></span> </td>
 							  {% elif s.recurring %}
-							  <td class="text-left drag_icon fit"> <span class="mdi mdi-calendar-refresh mdi-24px" ></span> </td>
+							  <td class="text-left drag_icon fit" title="Recurring"> <span class="mdi mdi-calendar-refresh mdi-24px" ></span> </td>
 							  {% else %}
-							  <td class="text-left drag_icon fit"> <span class="mdi mdi-calendar-week mdi-24px" ></span> </td>
+							  <td class="text-left drag_icon fit" title="Daily"> <span class="mdi mdi-calendar-week mdi-24px" ></span> </td>
 							  {% endif %}
 
 							  <td class="text-left fit">{% if s.template %}<span class="mdi mdi-directions-fork mdi-24px" ></span>{% endif %}</span></td>
 
 							  <td class="text-left fit" >
-								<button type="button" class="btn btn-default bg-primary edit-button" aria-id="{{ s.id }}" ><span class="mdi mdi-pencil" ></span></button>
-								<button type="button" class="btn btn-default bg-primary view-button" aria-id="{{ s.id }}" ><span class="mdi mdi-eye" ></span></button>
+								<button type="button" class="btn btn-default bg-primary edit-button" aria-id="{{ s.id }}" title="Edit"><span class="mdi mdi-pencil" ></span></button>
+								<button type="button" class="btn btn-default bg-primary view-button" aria-id="{{ s.id }}" title="Details"><span class="mdi mdi-eye" ></span></button>
 							  </td>
 							  <td  class="name_col" >
 								<div class="row-title"><p data-bs-toggle="tooltip" data-bs-html="true"  title="{{ s.id }}" >{{ s.name }}</p></div>
