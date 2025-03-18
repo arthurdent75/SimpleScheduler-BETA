@@ -1,7 +1,14 @@
-**Version 2.9.5 beta**
-- New feature: group scheduler in frontend
-- New feature: add support for INPUT_BUTTON
+**Version 3.1 beta**
+- New feature: "excluded entities" in config
+- New feature: added group recap when closed
+- Resizable sidebar
+- Frontend bugfix (mainly on group) 
+- Improvement in error log
+
+**Version 3.0 beta**
+- New feature: arrange scheduler in group
 - New feature: call script with parameters
+- New feature: add support for INPUT_BUTTON
 - Update addon base image with multi-architecture support
 - Faster download: reduced image size by 85%
 - Threading architecture

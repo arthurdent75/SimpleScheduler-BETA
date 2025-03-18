@@ -1,5 +1,5 @@
 ---
-version: "2.9.5"
+version: "3.1.7"
 name: Simple Scheduler (BETA)
 description: Simple timer on weekly base
 slug: simplescheduler
@@ -13,6 +13,7 @@ image: ghcr.io/arthurdent75/simplescheduler-beta
 init: false
 homeassistant_api: true
 ingress: true
+panel_admin: false
 panel_title: Scheduler
 panel_icon: mdi:calendar-clock
 map:
