@@ -291,7 +291,23 @@
 						},
                 start: function(event, ui) {
                     		if (ui.item.hasClass("row-is-group")) { closeGroup(ui.item); }
-                		}
+                		},
+				beforeStop: function(event, ui) {
+							const $draggedItem = ui.item;
+							const isGroupRow = $draggedItem.hasClass('row-is-group');
+
+							if (isGroupRow) {
+								const newIndex = ui.item.index();
+								const $items = ui.item.parent().children();
+								const $prev = $items.eq(newIndex - 1);
+								const $next = $items.eq(newIndex);
+								const prevGroup = $prev.attr('data-group');
+								const nextGroup = $next.attr('data-group');
+								if (prevGroup && nextGroup) {
+									$(this).sortable('cancel');
+								}
+							}
+						}
 			}).disableSelection();
 
 		    $("tr.row-is-group[start-closed]").each(function () {
@@ -341,7 +357,7 @@ function sendSortData() {
 		$(this).attr('data-order',i);
 		orderlist=orderlist+'&list['+i+']='+$(this).attr('data-value');
 	});
-	let json_groups = generateJsonFromTable();
+	let json_groups = btoa(generateJsonFromTable());
 	$("#sidebar-wrapper").load("sort?"+orderlist+"&groups="+json_groups);
 
 }
@@ -374,9 +390,9 @@ function generateJsonFromTable() {
 			}
 		}
 	});
-
+	// console.log(groups);
 	let jsonString =  JSON.stringify(groups);
-	return encodeURIComponent(jsonString);
+	return jsonString;
 }
 
 function toggleGroup(t) {

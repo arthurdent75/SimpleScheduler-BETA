@@ -1,5 +1,3 @@
-from operator import truediv
-
 from flask import Flask, render_template, request, redirect, make_response
 import paho.mqtt.client as mqtt
 import flask.cli
@@ -7,12 +5,9 @@ import logging
 import glob
 import os
 import json
-import uuid
 from datetime import datetime, timedelta
 import pytz
 import requests
-import re
-import psutil
 import time
 import uuid
 import threading
@@ -153,7 +148,7 @@ def webserver_saveconfig():
 
     option_file_path = os.path.join(simpleschedulerconf.json_folder, "options.dat")
     with open(option_file_path, 'w') as option_file:
-       json_config = json.dump(jsondata, option_file)
+       json.dump(jsondata, option_file)
 
     init()
 
@@ -533,11 +528,10 @@ def mqtt_send_config(client):
             # time.sleep(.1)
 
 
-
 def get_options():
     path = os.path.join(simpleschedulerconf.json_folder, "options.dat")
     if not os.path.exists(path):
-        path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "options.dat")
+        path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "options.default")
     with open(path, "r", encoding='utf-8') as read_file:
         opt = json.load(read_file)
     return opt
@@ -545,17 +539,13 @@ def get_options():
 
 def get_css():
     global options
-    path_light = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates", "light.css")
-    path_dark = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates", "dark.css")
+    path_light = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates", "style.css")
     css = ""
-    # try:
-    with open(path_light, "r", encoding='utf-8') as css_file:
-        css += css_file.read()
-    if options['dark_theme']:
-        with open(path_dark, "r", encoding='utf-8') as css_file:
+    try:
+        with open(path_light, "r", encoding='utf-8') as css_file:
             css += css_file.read()
-    # except Exception as e:
-    #     printlog("ERROR: Something went wrong while loading CSS")
+    except Exception as e:
+            printlog("ERROR: Something went wrong while loading CSS",e)
     return css
 
 
@@ -632,17 +622,23 @@ def get_groups():
 
 def save_sort_list(data):
     idlist = []
+    json_groups=""
     for el in data:
         if el == "groups":
-            json_groups = data[el]
+            base64_groups = data[el]
+            json_groups = base64.b64decode(base64_groups).decode('utf-8')
         else:
             idlist.append(data[el])
     jsonlist = json.loads('{"id_order":[]}')
     jsonlist['id_order'] = idlist
     with open(simpleschedulerconf.json_folder + "sort.dat", "w") as sort_file:
         json.dump(jsonlist, sort_file)
-    with open(simpleschedulerconf.json_folder + "group.dat", "w") as group_file:
-        group_file.write(json_groups)
+    if  json_groups.count('{') == json_groups.count('}'):
+        with open(simpleschedulerconf.json_folder + "group.dat", "w") as group_file:
+            group_file.write(json_groups)
+    else:
+        printlog("ERROR: Malformed group list received")
+        printlog("       "+json_groups)
     return True
 
 
@@ -869,9 +865,9 @@ def notify_on_error(message):
                 if "message" in response:
                     json_response = json.loads(r.content)
                     response = json_response['message']
-                printlog("ERROR:  ↳ Notification NOT sent - " % (response))
+                printlog("ERROR:  ↳ Notification NOT sent - " +response )
         except Exception as e:
-            printlog("ERROR:  ↳ Something went wrong " )
+            printlog("ERROR:  ↳ Something went wrong ",e )
     return True
 
 def get_notifiers():
@@ -1108,7 +1104,7 @@ def run_scheduler():
                     options = get_options()
                     try:
                         max_retry = int(options['max_retry'])
-                    except Exception as e:
+                    except:
                         max_retry = 3
                     if max_retry < 0: max_retry = 3
                     if max_retry > 5: max_retry = 5
