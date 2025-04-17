@@ -98,7 +98,7 @@ You can toggle the visibility with the *eye* icon near the scheduler name.
 If you prefer to have the entire schedule always visible, you can easily achieve that by enabling **details_uncovered** in the addon configuration
 
 ### Dark theme 
-If you prefer a dark theme, you can activate it in the addon configuration by checking the option **dark_theme**
+The addon switches to dark theme accordingly to your setup
 
 ### Translation
 The default text language is English. They are very few words.
