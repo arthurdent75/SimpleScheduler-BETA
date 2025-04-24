@@ -90,7 +90,7 @@ This feature is disabled by default because it requires a working MQTT server (b
 Take a look at the [MQTT.MD](https://github.com/arthurdent75/SimpleScheduler/blob/master/asset/MQTT.MD "MQTT.MD") file to know more. 
 
 ### Retry on unavailable
-By default, SimpleScheduler will retry 3 times if an entity is unavailable. The first retry attempt happens after 5 seconds, then every minute. You can change the number of retries in the addon options.
+By default, SimpleScheduler will retry 3 times if an entity is unavailable. The first retry attempt happens after 5 seconds, then every minute. You can change the number of retries in the addon options. The valid range is 0 to 5.
 
 ### Hidden scheduler details
 When you have a lot of schedulers the view can become messy. As a default, all the scheduler details are hidden, so you can have a clear look. 
@@ -98,7 +98,7 @@ You can toggle the visibility with the *eye* icon near the scheduler name.
 If you prefer to have the entire schedule always visible, you can easily achieve that by enabling **details_uncovered** in the addon configuration
 
 ### Dark theme 
-If you prefer a dark theme, you can activate it in the addon configuration by checking the option **dark_theme**
+The addon switches to dark theme accordingly to your setup
 
 ### Translation
 The default text language is English. They are very few words.
