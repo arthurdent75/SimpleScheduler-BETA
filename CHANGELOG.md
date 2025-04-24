@@ -1,3 +1,10 @@
+**Version 3.2 beta**
+- Added support for sort on mobile
+- Added support for double click on mobile
+- Drag only by icon
+- Fixed bug in schedule error reporting
+
+
 **Version 3.1 beta**
 - New feature: "excluded entities" in config
 - New feature: added group recap when closed

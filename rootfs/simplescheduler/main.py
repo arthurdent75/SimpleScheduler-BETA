@@ -709,6 +709,11 @@ def call_ha_api(command_url: str, post_data: str):
         if opt['debug']: printlog("DEBUG: %s %s" % (command, post_data))
         if r.status_code != 200:
             printlog("ERROR:  Error calling HA API " + str(r.status_code))
+    except requests.exceptions.ReadTimeout:
+        if not ("/script/" in command_url):
+            printlog("ERROR: Unable to call Home Assistant service", e)
+            # NB: when you call a script, the response is sent when execution ends,
+            #     so scripts with delay throw timeout exception
     except Exception as e:
         printlog("ERROR: Unable to call Home Assistant service",e)
     return True
@@ -1147,9 +1152,9 @@ def run_scheduler():
                                 else:
                                     elist = get_events_array(on_tod_false)
 
-                                for e in elist:
+                                for ev in elist:
                                     value = ""
-                                    p = e.upper().split('>')
+                                    p = ev.upper().split('>')
                                     t = p[0]
                                     if len(p) > 1:
                                         value = p[1][1:]
@@ -1175,9 +1180,9 @@ def run_scheduler():
                                 else:
                                     elist = get_events_array(off_tod_false)
 
-                                for e in elist:
+                                for ev in elist:
                                     value = ""
-                                    p = e.upper().split('>')
+                                    p = ev.upper().split('>')
                                     t = p[0]
                                     if len(p) > 1:
                                         value = p[1][1:]

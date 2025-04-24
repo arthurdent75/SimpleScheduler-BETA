@@ -10,6 +10,7 @@
 	<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
 
 	<link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/css/tom-select.css" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/js/tom-select.complete.min.js"></script>
@@ -265,6 +266,7 @@
 
 			$tbody.sortable({
 				items: ".row-is-item, .row-is-group",
+				handle: ".drag_icon",
 				distance: 5,
 				delay: 100,
 				opacity: 0.6,
@@ -320,28 +322,7 @@
 
 			group_recap();
 
-			var isResizing = false;
-			var startX;
-			var startWidth;
 
-			$("#resize-handle").on("mousedown", function (e) {
-				isResizing = true;
-				startX = e.clientX;
-				startWidth = $("#sidebar").width();
-				$("body").css("user-select", "none");
-			});
-
-			$(document).on("mousemove", function (e) {
-				if (isResizing) {
-					var newWidth = startWidth - (e.clientX - startX);
-					$("#sidebar").css("width", newWidth + "px");
-				}
-			});
-
-			$(document).on("mouseup", function () {
-				isResizing = false;
-				$("body").css("user-select", "");
-			});
 
 	});
 
@@ -461,6 +442,45 @@ function group_recap() {
     });
 }
 
+var isResizing = false;
+var startX;
+var startWidth;
+
+function getClientX(e) {
+	if (e.type.startsWith("touch")) {
+		return e.touches[0].clientX;
+	} else {
+		return e.clientX;
+	}
+}
+
+$("#resize-handle").on("mousedown touchstart", function (e) {
+	isResizing = true;
+	startX = getClientX(e);
+	startWidth = $("#sidebar").width();
+	$("body").css("user-select", "none");
+
+	// Impedisci lo scroll su touch
+	if (e.type === "touchstart") e.preventDefault();
+});
+
+$(document).on("mousemove touchmove", function (e) {
+	if (isResizing) {
+		let currentX = getClientX(e);
+		let newWidth = startWidth - (currentX - startX);
+		$("#sidebar").css("width", newWidth + "px");
+
+		// Impedisci lo scroll su touch
+		if (e.type === "touchmove") e.preventDefault();
+	}
+});
+
+$(document).on("mouseup touchend", function () {
+	if (isResizing) {
+		isResizing = false;
+		$("body").css("user-select", "");
+	}
+});
 
 	function toggle_false_condition_section() {
 			t = document.getElementById('template');
@@ -497,6 +517,7 @@ function group_recap() {
 	});
 
 	$(document).on("click", ".group-icon", function() {
+		$("#sidebar").hide();
 		let tr = this.closest("tr");
 		toggleGroup(tr);
 	});
@@ -750,6 +771,20 @@ function group_recap() {
 
 	$(document).on('dblclick', '.row-is-item', function () {
 			toggleDisabled(this);
+	});
+
+	let lastTap = 0;
+
+	$(document).on('touchend', '.row-is-item', function (e) {
+		const currentTime = new Date().getTime();
+		const tapLength = currentTime - lastTap;
+
+		if (tapLength < 500 && tapLength > 0) {
+			toggleDisabled(this); // Per dispositivi touch
+			e.preventDefault();
+		}
+
+		lastTap = currentTime;
 	});
 
 	function toggleDisabled(tr) {
