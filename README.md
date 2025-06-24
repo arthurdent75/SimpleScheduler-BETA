@@ -1,7 +1,7 @@
 # SimpleScheduler
 
 A Home Assistant add-on to schedule switches, lights, and other entities on a weekly base in a visual way without coding.\
-You can keep all the schedules in one place and add/change them in a few clicks, even in your mobile app.
+You can keep all the schedules in one place and add/change them in a few clicks, even on your mobile app.
 
 ![SimpleScheduler](https://raw.githubusercontent.com/arthurdent75/SimpleScheduler/master/asset/logo.png)
 
@@ -10,11 +10,11 @@ Add the repository and then the addon by clicking on the badges:\
 [<img src="https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg">](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Farthurdent75%2FSimpleScheduler) \
 [<img src="https://my.home-assistant.io/badges/supervisor_addon.svg">](https://my.home-assistant.io/redirect/supervisor_addon/?addon=00185a40_simplescheduler) \
 If something goes wrong, you can install it manually.\
-You can add the URL of this page in your "add-on store" as a new repository:\
+You can add the URL of this page to your "add-on store" as a new repository:\
 *Settings > Add-ons > ADD-ON STORE button in bottom right corner >  three dots in top right corner > Repositories*\
 Click *Check for updates* and you will find the add-on "Simple Scheduler" listed.
 
-If you are not using a supervised installation, you can run the addon as a standalone docker.
+If you are not using a supervised installation, you can run the addon as a standalone Docker.
 Take a look here: [docker_install.MD](https://github.com/arthurdent75/SimpleScheduler/blob/master/asset/docker_install.MD "docker_install.MD")
 
 ### Type of scheduler
@@ -30,8 +30,8 @@ Once installed, open the GUI, click on the round plus button in the top left, an
 Choose one or more entities from the dropdown, fill in the ON time (in 24-hour format with leading zero, as suggested), and select the weekdays. Do the same for the OFF time and click "save".
 
 - You can set **multiple times** in the same scheduler: just enter them in the ON/OFF field separated by spaces.  
-- It's not mandatory to add both ON and OFF time. You can leave one of them empty if you don't need it. For example, you want to turn off a light every day at 22:00, but you don't need to turn it on.
-- You can use the words **sunrise** and **sunset** instead of *hh:mm*; if needed, you can add an offset (in minutes). Sunset and Sunrise times are recalculated every day at midnight and are reported in the status bar. Some examples: **sunrise+30** is executed 30 minutes after sunrise; **sunset-60** is executed 1 hour before the sunset.
+- It's not mandatory to add both ON and OFF times. You can leave one of them empty if you don't need it. For example, you want to turn off a light every day at 22:00, but you don't need to turn it on.
+- You can use the words **sunrise** and **sunset** instead of *hh:mm*; if needed, you can add an offset (in minutes). Sunset and Sunrise times are recalculated every day at midnight and are reported in the status bar. Some examples: **sunrise+30** is executed 30 minutes after sunrise; **sunset-60** is executed 1 hour before sunset.
 - You can **drag the rows to sort them**, so you can keep them organized as you like!
 - You can also choose to **disable a schedule**: the schedule will stay there, but it will not be executed until you enable it back. You can double-click on a row to quickly enable/disable the scheduler.
 - You can **organize schedulers in groups**, that can be expanded and collapsed as you like. You can open, close, drag, disable, rename, and delete them. Add a schedule to a group by dragging it over and remove it by dragging it out. If you delete a group, the schedulers inside the group will not be deleted.
@@ -58,7 +58,7 @@ Choose one or more entities from the dropdown, fill in the ON time (in 24-hour f
 | input_boolean | ON | OFF |  |
 
 
-***Extra features (obviously) works only in the "TURN ON" section !*
+***Extra features (obviously) work only in the "TURN ON" section !*
 
 ### Conditions
 For each scheduler, you can add a condition that will be checked.
@@ -81,7 +81,7 @@ If the template expression has syntax errors it will be considered 'false', and 
 Use the template render utility in Developer Tools to test the condition before putting it into the scheduler.
 
 ### Failure notification 
-If a schedule was not able to execute the action, it can send you a notification, using one of the notifier available in your setup. You can activate it in the addon configuration by selecting a notifier from the **notify on error** dropdown, otherwise you must select the entry "*disabled*". Choose the native notifier "*persistent_notification*" to receive the  message in frontend. 
+If a schedule is not able to execute the action, it can send you a notification, using one of the notifiers available in your setup. You can activate it in the addon configuration by selecting a notifier from the **notify on error** dropdown, otherwise you must select the entry "*disabled*". Choose the native notifier "*persistent_notification*" to receive the  message in the frontend. 
 This addon does not allow the addition or configuration of a notifier. This operation must be performed in Home Assistant. More info here: https://www.home-assistant.io/integrations/notify/
 
 ### Frontend switch to enable/disable (with MQTT)
@@ -101,10 +101,10 @@ If you prefer to have the entire schedule always visible, you can easily achieve
 The addon switches to dark theme accordingly to your setup
 
 ### Translation
-The default text language is English. They are very few words.
+The default text language is English. There are very few words.
 If you want to translate them, you just need to take a look at the configuration section of the addon.
-Rewrite the words you would like to have in your language and restart the addon.
-For the weekdays, as you can easily understand, only the first two chars are used.
+Rewrite the words you would like to use in your language and restart the add-on.
+For the weekdays, as you can easily understand, only the first two characters are used.
 
 ### Two words about the stored data
 Every schedule (or row, if you prefer) is a JSON file stored in the `/share/simplescheduler` folder under the SAMBA share.

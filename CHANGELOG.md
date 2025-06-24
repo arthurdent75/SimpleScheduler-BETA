@@ -3,7 +3,7 @@
 - Added support for double click on mobile
 - Drag only by icon
 - Fixed bug in schedule error reporting
-
+- Optimized scheduler routine
 
 **Version 3.1 beta**
 - New feature: "excluded entities" in config
