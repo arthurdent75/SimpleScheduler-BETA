@@ -453,11 +453,13 @@
     tr.row-is-item > td {  padding-left: 1em; }
     /* tr.row-in-group > td {  padding-left: 3em;   } */
 
-    .row-is-group {font-weight: bold;  cursor: pointer; }
+    .row-is-group {font-weight: bold;  }
+    .group-icon {  cursor: pointer; }
+    .group-name {  cursor: move; }
     .group-icon { margin-right: 5px; cursor: pointer; }
     .edit-icon, .delete-icon { margin-left: 10px; cursor: pointer; }
     .group-delete {	float: right;  }
-    .group-rename { margin-left: 1em; }
+    .group-rename { margin-left: 1em; ursor: pointer; }
     tr.row-is-group:hover .group-delete,
     tr.row-is-group:hover .group-rename { display:initial; }
 

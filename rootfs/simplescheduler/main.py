@@ -23,10 +23,10 @@ lwt_topic = "homeassistant/switch/simplescheduler/availability"
 no_notification_placeholder = " - disabled - "
 sun_data = ""
 schedulers_list = []
-options = []
+options: dict = {}
 weekday = []
 has_changed: bool = False
-mqttclient = None
+mqttclient = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="SimpleScheduler", clean_session=False)
 mqtt_enabled = False
 ha_timezone = "utc"
 request_timeout = 5  # seconds
@@ -148,7 +148,7 @@ def webserver_saveconfig():
 
     option_file_path = os.path.join(simpleschedulerconf.json_folder, "options.dat")
     with open(option_file_path, 'w') as option_file:
-       json.dump(jsondata, option_file)
+       json.dump(jsondata, option_file) # type: ignore
 
     init()
 
@@ -168,21 +168,22 @@ def webserver_clone():
         param['id'] = newsid
         param['name'] = param['name'] + " (2) "
         with open(newfile, 'w') as jsonFile:
-            json.dump(param, jsonFile)
+            json.dump(param, jsonFile) # type: ignore
     return redirect("main")
 
 
 @app.route("/update", methods=['POST'])
 def webserver_update():
+    on_tod = off_tod = on_dow = off_dow = on_tod_false = off_tod_false = ""
     sid = request.form.get('id')
     enabled = request.form.get("enabled")
     dontretry = request.form.get("dontretry")
     template = request.form.get("template")
     name = request.form.get("name")
     entity_id = request.form.getlist('entity_id[]')
-    type = request.form.get('type')
-    if type != 'weekly':
-        on_tod = request.form.get('on_tod')
+    sched_type:str = request.form.get('type',"")
+    if sched_type != 'weekly':
+        on_tod = request.form.get('on_tod' , "")
         on_tod_false = request.form.get('on_tod_false')
         off_tod = request.form.get('off_tod')
         off_tod_false = request.form.get('off_tod_false')
@@ -193,14 +194,14 @@ def webserver_update():
         for o in request.form.getlist('off_dow[]'):
             off_dow += o
 
-    data = json.loads(get_json_template(type))
+    data = json.loads(get_json_template(sched_type))
     data['id'] = sid
     data['name'] = name if name else sid
     data['enabled'] = enabled if enabled else 0
     data['dontretry'] = dontretry if dontretry else 0
     data['template'] = template.replace('"',"'") if template else ''
     data['entity_id'] = entity_id
-    if type == 'weekly':
+    if sched_type == 'weekly':
         data['weekly']['on_1'] = request.form.get('on_1')
         data['weekly']['on_2'] = request.form.get('on_2')
         data['weekly']['on_3'] = request.form.get('on_3')
@@ -215,7 +216,7 @@ def webserver_update():
         data['weekly']['off_5'] = request.form.get('off_5')
         data['weekly']['off_6'] = request.form.get('off_6')
         data['weekly']['off_7'] = request.form.get('off_7')
-    elif type == 'recurring':
+    elif sched_type == 'recurring':
         data['recurring']['on_start'] = request.form.get('on_start')
         data['recurring']['on_end'] = request.form.get('on_end')
         data['recurring']['on_interval'] = request.form.get('on_interval')
@@ -235,7 +236,7 @@ def webserver_update():
         data['off_tod_false'] = off_tod_false
     file = simpleschedulerconf.json_folder + sid + '.json'
     with open(file, 'w') as jsonFile:
-        json.dump(data, jsonFile)
+        json.dump(data, jsonFile) # type: ignore
     if options['MQTT']['enabled']:
         mqtt_send_config(mqttclient)
     return redirect("main")
@@ -291,7 +292,6 @@ def utility_processor():
     def format_event(value: str, showvalue: bool):
         if not value: return ''
         result: str = ""
-        extra: str = ""
         value = encode_braces_to_base32(value)
         events = value.upper().replace(',', ' ').replace(';', ' ').split(" ")
 
@@ -476,7 +476,7 @@ def update_json_file(object_id, field_name, field_value):
                 data = json.load(jsonFile)
             data[field_name] = field_value
             with open(file, "w") as jsonFile:
-                json.dump(data, jsonFile)
+                json.dump(data, jsonFile) # type: ignore
     except Exception as e:
         printlog("ERROR: Unable to update JSON file",e)
     return True
@@ -632,7 +632,7 @@ def save_sort_list(data):
     jsonlist = json.loads('{"id_order":[]}')
     jsonlist['id_order'] = idlist
     with open(simpleschedulerconf.json_folder + "sort.dat", "w") as sort_file:
-        json.dump(jsonlist, sort_file)
+        json.dump(jsonlist, sort_file) # type: ignore
     if  json_groups.count('{') == json_groups.count('}'):
         with open(simpleschedulerconf.json_folder + "group.dat", "w") as group_file:
             group_file.write(json_groups)
@@ -711,7 +711,7 @@ def call_ha_api(command_url: str, post_data: str):
             printlog("ERROR:  Error calling HA API " + str(r.status_code))
     except requests.exceptions.ReadTimeout:
         if not ("/script/" in command_url):
-            printlog("ERROR: Unable to call Home Assistant service", e)
+            printlog("ERROR: Unable to call Home Assistant service (timeout)")
             # NB: when you call a script, the response is sent when execution ends,
             #     so scripts with delay throw timeout exception
     except Exception as e:
@@ -854,18 +854,18 @@ def call_ha(eid_list, action, passedvalue, friendly_name):
 
 def notify_on_error(message):
     response = ""
-    options = get_options()
-    notifier = options.get('notifier', '' )
+    opt : dict = get_options()
+    notifier = opt.get('notifier', '')
 
     if notifier != no_notification_placeholder and len(notifier)>0 :
         headers = {'content-type': 'application/json', 'Authorization': 'Bearer ' + simpleschedulerconf.SUPERVISOR_TOKEN}
         command_url = simpleschedulerconf.HASSIO_URL + "/services/notify/" + notifier
-        post_data = '{"message":"%s"}' % (message)
+        post_data = '{"message":"%s"}' % message
         try:
             r = requests.post(url=command_url, data=post_data, headers=headers, timeout=request_timeout)
             if r.content:
                 response = r.content.decode().lower()
-                printlog("SCHED:  ↳ Notification sent to %s" % (notifier))
+                printlog("SCHED:  ↳ Notification sent to %s" % notifier)
             if r.status_code != 200:
                 if "message" in response:
                     json_response = json.loads(r.content)
@@ -891,7 +891,7 @@ def get_notifiers():
             if "message" in response:
                 json_response = json.loads(response.content)
                 response = json_response['message']
-            printlog("ERROR: Something went wrong getting notifiers - " % (response))
+            printlog("ERROR: Something went wrong getting notifiers - %s " % response)
     except Exception as e:
         printlog("ERROR: Something went wrong getting notifiers",e )
 
@@ -914,7 +914,7 @@ def encode_braces_to_base32(s):
     def encode_match(match):
         encoded = base64.b32encode(match.group(0).encode()).decode()
         return encoded
-    return re.sub(r'\{.*?\}', encode_match, s)
+    return re.sub(r'\{.*?\}', encode_match, s) # noqa
 
 
 def get_events_array(s):
@@ -1002,6 +1002,7 @@ def get_ha_timezone():
     return response
 
 def printlog(message,e=None ):
+    fullrow2 = ""
     t = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     fullrow = "[%s] %s" % (t, message)
     print(fullrow)
@@ -1067,7 +1068,6 @@ def run_mqtt():
     if mqtt_enabled:
             try:
                 printlog('STATUS: Starting MQTT')
-                mqttclient = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="SimpleScheduler", clean_session=False)
                 mqttclient.on_connect = on_connect
                 mqttclient.on_message = on_message
                 mqttclient.will_set(lwt_topic, payload="offline", qos=0, retain=True)
@@ -1100,33 +1100,30 @@ def run_scheduler():
                 now = datetime.now()
                 seconds = now.strftime("%S")
                 if seconds == '00':
-                    options = get_options()
-                    max_retry = min(max(int(options.get('max_retry', 3)), 0), 5)
+                    opt : dict = get_options()
+                    max_retry = min(max(int(opt.get('max_retry', 3)), 0), 5)
 
                     current_time = now.strftime("%H:%M")
                     current_dow = now.strftime("%w")
                     if current_dow == '0':
                         current_dow = '7'
 
-                    schedulers_list = load_json_schedulers()
                     friendly_name = get_switch_friendly_names()
 
                     if current_time == "00:01" or not sunrise or not sunset:
-                        if options.get('debug'):
+                        if opt.get('debug'):
                             printlog('DEBUG: Retrieving sunrise and sunset')
                         sunrise, sunset = get_sun(get_ha_timezone())
 
-                    for s in schedulers_list:
+                    for s in load_json_schedulers():
                         if not s.get('enabled'):
                             continue
 
                         template = s.get('template', '')
                         dont_retry = s.get('dontretry', 0)
-                        on_tod_false = s.get('on_tod_false', '')
-                        off_tod_false = s.get('off_tod_false', '')
                         week_onoff = s.get('weekly')
 
-                        if options.get('debug'):
+                        if opt.get('debug'):
                             printlog(f"DEBUG: Parsing [{s['name']}]")
 
                         if week_onoff:
@@ -1142,7 +1139,7 @@ def run_scheduler():
                             condition = True
                             if template:
                                 condition = evaluate_template(template)
-                                if options.get('debug'):
+                                if opt.get('debug'):
                                     printlog(f"DEBUG: Evaluating template for [{s['name']}]: {condition}")
                             if not condition:
                                 tod = s.get(f'{action}_tod_false', '')
@@ -1176,7 +1173,7 @@ def run_scheduler():
 
                     time.sleep(5)
 
-                    if options.get('debug'):
+                    if opt.get('debug'):
                         printlog(f"DEBUG: Max Retry: {max_retry}")
                         printlog(f"DEBUG: Starting Queue management - Queue length: {len(command_queue)}")
 
@@ -1184,7 +1181,7 @@ def run_scheduler():
                         item = command_queue[key]
                         status = get_entity_status(item['entity_id'], True)
 
-                        if options.get('debug'):
+                        if opt.get('debug'):
                             printlog(f"DEBUG: ID:{key} | Entity status:{status.upper()} | Queue item:{item}")
 
                         name = friendly_name.get(item['entity_id'], item['entity_id'])
@@ -1207,7 +1204,7 @@ def run_scheduler():
                             notify_on_error(msg)
                             command_queue.pop(key)
 
-                    if options.get('debug'):
+                    if opt.get('debug'):
                         printlog(f"DEBUG: Finished Queue management - Queue length: {len(command_queue)}")
 
                 time.sleep(1)
