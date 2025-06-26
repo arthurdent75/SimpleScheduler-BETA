@@ -455,7 +455,6 @@
 
     .row-is-group {font-weight: bold;  }
     .group-icon {  cursor: pointer; }
-    .group-name {  cursor: move; }
     .group-icon { margin-right: 5px; cursor: pointer; }
     .edit-icon, .delete-icon { margin-left: 10px; cursor: pointer; }
     .group-delete {	float: right;  }
@@ -469,6 +468,18 @@
         border-right: 1px solid #03a9f4;
         background-color: #f0f6ff
         }
+    tr  {
+        border-left: 5px solid white;
+    }
+
+    td.drag_cell {
+        width: 1%;
+        min-width: 50px;
+        max-width: 50px;
+        text-align: center;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
 
     #dtable thead tr  { border-left: 5px solid #03a9f4;}
 
@@ -541,6 +552,8 @@
 			border-bottom: 1px solid var(--maincolor);
 		}
 
+        td.drag_cell { float: left !important;  padding: 0;  }
+
         #config-form .input-sm {text-align:center;}
 
 		td.name_col {width: 100%; max-width: none;}
@@ -575,6 +588,8 @@
             BODY { 	background-color: #111111; color: white; }
 
             .table td, .table th {  border-top: 1px solid #333; color: white; }
+
+            tr  {        border-left: 5px solid #111111;     }
 
             .week_table_header { color: #e1e1e1; }
 

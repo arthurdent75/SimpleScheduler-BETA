@@ -44,7 +44,7 @@
 				<table class="table table-hover" id="dtable">
 					<thead class="bg-primary">
 					<tr>
-					  <th scope="col" colspan="5" >
+					  <th scope="col" colspan="6" >
 						  <span class="titlebar_span" id="title">SimpleScheduler</span>
 						  <span class="titlebar_span" id="show-add" title="New scheduler"><button type="button" class="btn btn-default bg-white main-color" ><span class="mdi mdi-plus"></span></button></span>
 						  <span class="titlebar_span" id="add-group" title="New group"><button type="button" class="btn btn-default bg-white main-color"><span class="mdi mdi-format-list-group-plus"></span></button></span>
@@ -60,6 +60,7 @@
 					{% for key, group in groups.items() %}
 					   {% set group_id = "group-" + key %}
 						<tr data-value="{{ group_id }}" data-order="{{ sort[group_id] }}"  class="row-is-group" data-group="{{ key }}" style="opacity: 1;"  {% if group.closed %}start-closed{% endif %}  >
+							<td class="text-left fit drag_cell"><span class="mdi mdi-drag mdi-24px drag_icon" ></span></td>
 							<td colspan="5" title="Drag a scheduler over to add it to the group. Drag it away to remove it">
 								<span class="group-icon"><span class="mdi mdi-18px mdi-triangle mdi-rotate-180" ></span></span>
 								<span class="group-name">{{ group.name }}</span>
@@ -86,12 +87,13 @@
 							{% set group_id = ns_id.value %}
 
 						  <tr data-value="{{ s.id }}" data-order="{{ sort[s.id] if sort[s.id] is number else 99999 }}" class="row-is-item {% if group_id %}row-in-group{% endif %}" style="opacity: {{ '1' if s.enabled else '0.3' }}" {% if group_id %}data-group="{{ group_id }}"{% endif %}>
+							  <td class="text-left fit drag_cell"><span class="mdi mdi-drag mdi-24px drag_icon" ></span></td>
 							  {% if s.weekly %}
-							  <td class="text-left drag_icon fit" title="Weekly"> <span class="mdi mdi-calendar-range mdi-24px" ></span> </td>
+							  <td class="text-left fit" title="Weekly"><span class="mdi mdi-calendar-range mdi-24px" ></span> </td>
 							  {% elif s.recurring %}
-							  <td class="text-left drag_icon fit" title="Recurring"> <span class="mdi mdi-calendar-refresh mdi-24px" ></span> </td>
+							  <td class="text-left fit" title="Recurring"><span class="mdi mdi-calendar-refresh mdi-24px" ></span> </td>
 							  {% else %}
-							  <td class="text-left drag_icon fit" title="Daily"> <span class="mdi mdi-calendar-week mdi-24px" ></span> </td>
+							  <td class="text-left fit" title="Daily"><span class="mdi mdi-calendar-week mdi-24px" ></span> </td>
 							  {% endif %}
 
 							  <td class="text-left fit">{% if s.template %}<span class="mdi mdi-directions-fork mdi-24px" ></span>{% endif %}</span></td>
@@ -266,7 +268,7 @@
 
 			$tbody.sortable({
 				items: ".row-is-item, .row-is-group",
-				handle: ".drag_icon, .group-name",
+				handle: ".drag_icon",
 				distance: 5,
 				delay: 100,
 				opacity: 0.6,
@@ -503,6 +505,7 @@ $(document).on("mouseup touchend", function () {
 	$("#add-group").click(function() {
 		let id = generateGroupId();
 		let newRow = $(`<tr data-value='group-${id}' class='row-is-group' data-group='${id}'>
+			<td class="text-left fit drag_cell"><span class="mdi mdi-drag mdi-24px drag_icon" ></span></td>
 			<td colspan='5'>
 				<span class="group-icon"><span class="mdi mdi-18px mdi-triangle mdi-rotate-180" ></span></span>
 				<span class='group-name'>Group ${id}</span>
