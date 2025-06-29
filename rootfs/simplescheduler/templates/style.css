@@ -33,11 +33,12 @@
 		position: fixed;
 		top: 0;
 		right: 0;
-		padding: 1em;
+		padding: 1em 1em 1em 2em;
 		z-index: 9999;
 		background-color: rgba(255,255,255,0.98);
 		box-shadow: 5px 5px 18px 0px #000;
-		overflow-y: auto;		
+		overflow-y: visible;
+		overflow-x: visible;
 	}
 	
 	.edit-form > div {
@@ -508,17 +509,29 @@
         display: inline-block;
     }
 
-
+/*
     #resize-handle {
-        width: 10px;
-        height: 100px; /* Altezza dell'handle */
+        width: 2em;
+        height: 100px;
         background-color: #ccc;
         position: absolute;
-        left: -5px; /* Metà della larghezza per sovrapporsi al bordo */
+        left: -1em;
         top: 50%;
         transform: translateY(-50%);
-        cursor: ew-resize; /* Indica che può essere trascinato orizzontalmente */
+        cursor: ew-resize;
         border-radius: 5px;
+    }
+*/
+
+    #resize-handle {
+        width: 2em;
+        height: 100px;
+        background-color: trasparent;
+        position: absolute;
+        left: -0;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: ew-resize;
     }
 
 	@media screen and (min-width: 1281px) {

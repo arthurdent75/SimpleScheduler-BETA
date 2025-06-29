@@ -1042,6 +1042,7 @@ def init():
         ]
 
     # domain_list = get_domains()
+
     schedulers_list = load_json_schedulers()
 
     ha_timezone = get_ha_timezone()
@@ -1059,7 +1060,7 @@ def run_flask():
         printlog('STATUS: Starting WebServer')
         app.run(host='0.0.0.0', port=8099, debug=False)
     except Exception as e:
-        printlog(f"ERROR: Interface thread crashed [ {e} ], restarting...")
+        printlog(f"ERROR: Interface thread crashed: [ {e} ]")
         time.sleep(2)
 
 
@@ -1083,14 +1084,14 @@ def run_mqtt():
                 mqttclient.loop_stop()
                 mqttclient.disconnect()
             except Exception as e:
-                printlog(f"ERROR: MQTT thread error [ {e} ], restarting...")
+                printlog(f"ERROR: MQTT thread error: [ {e} ]")
                 time.sleep(2)
     else:
         time.sleep(1)
 
 
 def run_scheduler():
-        #try:
+        try:
             command_queue = {}
             sunrise, sunset = "", ""
 
@@ -1209,9 +1210,9 @@ def run_scheduler():
 
                 time.sleep(1)
 
-        #except Exception as e:
-        #    printlog(f"ERROR: Scheduler thread crashed [ {e} ], restarting...")
-        #    time.sleep(2)
+        except Exception as e:
+            printlog(f"ERROR: Scheduler thread crashed: [ {e} ]")
+            time.sleep(2)
 
 def start_thread(target):
     thread = threading.Thread(target=target, daemon=True)
