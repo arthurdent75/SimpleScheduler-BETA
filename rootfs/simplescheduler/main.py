@@ -485,12 +485,26 @@ def update_json_file(object_id, field_name, field_value):
 def load_json_schedulers():
     ss = []
     os.chdir(simpleschedulerconf.json_folder)
+
     for file in glob.glob("*.json"):
         with open(file, "r") as read_file:
             try:
-                ss.append(json.load(read_file))
+                data = json.load(read_file)
+                ss.append(data)
+
+                filename_no_ext = os.path.splitext(file)[0]
+                json_id = str(data.get("id", "")).strip()
+
+                if json_id and filename_no_ext != json_id:
+                    new_filename = f"{json_id}.json"
+                    if not os.path.exists(new_filename):
+                        printlog(f"WARNING: Renaming {file} to {new_filename}")
+                        os.rename(file, new_filename)
+                    else:
+                        printlog(f"WARNING: Cannot rename {file} to {new_filename}, file already exists!")
             except Exception as e:
-                printlog("ERROR: scheduler file %s is corrupted" % file,e)
+                printlog("ERROR: scheduler file %s is corrupted" % file, e)
+
     return ss
 
 
@@ -910,15 +924,19 @@ def is_a_retry_domain(entity):
     return response
 
 
-def encode_braces_to_base32(s):
+def encode_braces_to_base32(input_str):
     def encode_match(match):
-        encoded = base64.b32encode(match.group(0).encode()).decode()
-        return encoded
-    return re.sub(r'\{.*?\}', encode_match, s) # noqa
-
+        json_str = match.group(1)
+        json_str_clean = json_str.replace('\n', '').replace('\r', '')
+        encoded = base64.b32encode(json_str_clean.encode()).decode()
+        return f'J{encoded}'
+    pattern = r'J({.*?})'
+    result = re.sub(pattern, encode_match, input_str, flags=re.DOTALL)
+    return result
 
 def get_events_array(s):
     s = encode_braces_to_base32(s)
+    s = s.replace('\n', '').replace('\r', '')
     s = s.upper().replace(',', ' ').replace(';', ' ').strip()
     s = re.sub(' +', ' ', s)
     events = s.split(' ')
@@ -1125,7 +1143,7 @@ def run_scheduler():
                         week_onoff = s.get('weekly')
 
                         if opt.get('debug'):
-                            printlog(f"DEBUG: Parsing [{s['name']}]")
+                            printlog(f"DEBUG: Parsing [{s['name']}] [{s['id']}]")
 
                         if week_onoff:
                             s['weekly'] = ''

@@ -6,6 +6,10 @@
 - Optimized scheduler routine
 - Add support for drag on mobile (#192)
 - Fixes crashes in scheduler on timeout (#193)
+- Fixes crashes in scheduler on timeout (#193)
+- Fixes Scheduler thread crashes when using unsupported times separator (#198)
+- Manage wrong id filename
+
 
 **Version 3.1 beta**
 - New feature: "excluded entities" in config
