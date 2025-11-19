@@ -13,7 +13,7 @@ image: ghcr.io/arthurdent75/simplescheduler-beta
 init: false
 homeassistant_api: true
 ingress: true
-panel_admin: true
+panel_admin: false
 panel_title: Scheduler
 panel_icon: mdi:calendar-clock
 map:
