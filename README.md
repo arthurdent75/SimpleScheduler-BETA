@@ -1,121 +1,129 @@
-# SimpleScheduler
+# SimpleScheduler 4
 
-A Home Assistant add-on to schedule switches, lights, and other entities on a weekly base in a visual way without coding.\
-You can keep all the schedules in one place and add/change them in a few clicks, even on your mobile app.
-
-![SimpleScheduler](https://raw.githubusercontent.com/arthurdent75/SimpleScheduler/master/asset/logo.png)
+A Home Assistant add-on to schedule switches, lights and other entities on a weekly basis, in a visual way and without coding.\
+You keep all the schedules in one place and add or change them in a few clicks, even from the mobile app.
 
 ### Installation
-Add the repository and then the addon by clicking on the badges:\
+Add the repository and then the add-on by clicking on the badges:\
 [<img src="https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg">](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Farthurdent75%2FSimpleScheduler) \
 [<img src="https://my.home-assistant.io/badges/supervisor_addon.svg">](https://my.home-assistant.io/redirect/supervisor_addon/?addon=00185a40_simplescheduler) \
-If something goes wrong, you can install it manually.\
-You can add the URL of this page to your "add-on store" as a new repository:\
-*Settings > Add-ons > ADD-ON STORE button in bottom right corner >  three dots in top right corner > Repositories*\
-Click *Check for updates* and you will find the add-on "Simple Scheduler" listed.
+If something goes wrong, you can add the repository by hand:\
+*Settings > Add-ons > ADD-ON STORE (bottom right) > three dots (top right) > Repositories*\
+Click *Check for updates* and you will find "Simple Scheduler" in the list.
 
-If you are not using a supervised installation, you can run the addon as a standalone Docker.
-Take a look here: [docker_install.MD](https://github.com/arthurdent75/SimpleScheduler/blob/master/asset/docker_install.MD "docker_install.MD")
+The add-on needs a supervised installation (Home Assistant OS or Supervised): it talks to Home Assistant through the Supervisor.
 
 ### Type of scheduler
-
-There are three kinds of schedulers:
-- **Daily**: you can set an ON/OFF time (or a list of them) and then you choose on which weekdays you want to enable them.
-- **Weekly**: you can set a different ON/OFF time (or list of them) for every single day of the week.
-- **Recurring**: you can set a recurring ON/OFF (FROM hh:mm TO hh:mm EVERY n MINUTES) and choose on which weekdays you want to enable them.
+When you create a scheduler you choose its type. The type can't be changed later.
+- **Daily**: the same events on the weekdays you choose. Each event can have its own days.
+- **Weekly**: every day of the week has its own list of events. You can copy a day to Mon–Fri, to the weekend or to all days.
+- **Recurring**: repeat an action at a fixed interval between two times (FROM hh:mm TO hh:mm EVERY n minutes). The action can be *on*, *off* or *pulse* (turn on and then off after a number of minutes).
 
 ### How to use it
-The add-on is very easy and intuitive (or, at least, that's the goal)\
-Once installed, open the GUI, click on the round plus button in the top left, and choose your schedule type.\
-Choose one or more entities from the dropdown, fill in the ON time (in 24-hour format with leading zero, as suggested), and select the weekdays. Do the same for the OFF time and click "save".
+Open the add-on panel and click **New scheduler**. Choose the type, give it a name, pick one or more entities and add the events.\
+Every event has an action (on/off), a time and the weekdays. The timeline shows the events of the day, with sunrise, sunset and the current time.\
+Click **Save**. That's it!
 
-- You can set **multiple times** in the same scheduler: just enter them in the ON/OFF field separated by spaces.  
-- It's not mandatory to add both ON and OFF times. You can leave one of them empty if you don't need it. For example, you want to turn off a light every day at 22:00, but you don't need to turn it on.
-- You can use the words **sunrise** and **sunset** instead of *hh:mm*; if needed, you can add an offset (in minutes). Sunset and Sunrise times are recalculated every day at midnight and are reported in the status bar. Some examples: **sunrise+30** is executed 30 minutes after sunrise; **sunset-60** is executed 1 hour before sunset.
-- You can **drag the rows to sort them**, so you can keep them organized as you like!
-- You can also choose to **disable a schedule**: the schedule will stay there, but it will not be executed until you enable it back. You can double-click on a row to quickly enable/disable the scheduler.
-- You can **organize schedulers in groups**, that can be expanded and collapsed as you like. You can open, close, drag, disable, rename, and delete them. Add a schedule to a group by dragging it over and remove it by dragging it out. If you delete a group, the schedulers inside the group will not be deleted.
+In the list:
+- the switch on each row enables or disables the scheduler: a disabled scheduler stays there, but it is not executed until you enable it again;
+- the eye icon shows or hides the details of a scheduler;
+- double-click a row (or the pencil) to edit it;
+- **drag the rows** to sort them as you like.
 
-## Features
+### Supported entities
+light, switch, input_boolean, scene, script, automation, button, input_button, cover, valve, fan, climate, humidifier, vacuum, media_player, camera.
 
-| **Entity** | **ON action** | **OFF action** | **Extra features**** |
-|:---|:---:|:---:|:-----|
-| light | ON | OFF | **Brightness (%)**<br>*e.g: set brightness to 30%* <br>`hh:mm>B30`<br><br> **Brightness (absolute)**<br>*e.g: set absolute brightness to 200*<br> `hh:mm>BA200`<br> <br> **Color (hex)**<br>*e.g: set brightness to 75% and color to orange*<br> `hh:mm>B75\|FFA500`<br><br> **Color temp. (&deg;K)**<br>*e.g: set brightness to 20% and color temperature to 4700&deg;K* <br> `hh:mm>B20\|K4700` <br> |
-| cover | OPEN | CLOSE | **Percent (%)**<br>*e.g: open cover to 50%* <br>`hh:mm>P50` |
-| fan | ON | OFF | **Percent (%)**<br>*e.g: Turn on fan at 25%* <br>`hh:mm>F25` |
-| valve | OPEN | CLOSE | **Position (%)**<br>*e.g: Open valve at 50%* <br>`hh:mm>P50` |
-| climate | ON | OFF | **Temperature**<br>*e.g: turn on the climate and set temperature to 22.5&deg;* <br>`hh:mm>T22.5`<br><br> **Temperature Only**<br>*e.g: just set temperature to 20.7&deg;* <br>`hh:mm>TO20.7` |
-| humidifier | ON | OFF | **Humidity (&deg;)**<br>*e.g: turn on the (de)humidifier and set the humidity to 55%* <br>`hh:mm>H55` |
-| switch | ON | OFF |  |
-| button | PRESS | - |  |
-| input_button | PRESS | - |  |
-| vacuum | START | HOME |  |
-| media_player | ON | OFF |  |
-| script | RUN | STOP |  **Parameters**<br>*send parameters (JSON) to the script* <br>`hh:mm>J{"field 1":"value 1",...,"field n":"value n",}` |
-| scene | ON | - |  |
-| camera | ON | OFF |  |
-| automation | ENABLE | DISABLE |  |
-| input_boolean | ON | OFF |  |
+What *on* and *off* do depends on the entity: covers and valves open and close, vacuums start and return home, scripts run and stop, buttons are pressed, scenes are activated (buttons and scenes have no *off*).
 
+### Times and extra settings
+- A time can be `07:30`, `sunrise` or `sunset`, with an offset in minutes: `sunrise+30`, `sunset-60`.
+- The *on* events can carry extra settings, depending on the entity:
+  - **lights**: brightness in percent or absolute (1–255), RGB color or color temperature in Kelvin
+  - **covers** and **valves**: position (%)
+  - **fans**: speed (%)
+  - **climates**: mode (heat, cool, heat/cool, auto, dry, fan only) and **temperature**, optionally *without turning it on*. The list shows the modes supported by the selected climates; setting a mode turns the climate on in that mode, so it can't be combined with *without turning it on*
+  - **humidifiers**: humidity (%)
+  - **scripts**: variables, as a JSON object
+- It's not mandatory to add both *on* and *off*: if you only want to turn off a light every day at 22:00, add just that event.
 
-***Extra features (obviously) work only in the "TURN ON" section !*
+### Editing as text
+The **As text** card shows the events as text (*Preview*), and you can edit them by hand (*Manual edit* > *Apply text*).\
+One event per line: action, time, weekdays (1 = Mon … 7 = Sun), then the optional settings:
+```
+on 07:30 12345 B30
+off sunset-30 1234567
+on 18:00 67 C#FF9900
+on 06:00 12345 T21.5 if:false
+on 14:00 67 Mcool T24
+on 16:30 1234567 B70 force
+```
+Settings: `B30` brightness %, `BA200` absolute brightness, `C#FF9900` color, `K4700` color temperature, `P50` position, `F25` fan speed, `Mcool` climate mode (`heat`, `cool`, `heat_cool`, `auto`, `dry`, `fan_only`), `T21.5` temperature, `TO21.5` temperature only, `H55` humidity, `J{...}` script variables (always last), `if:false` (see Conditions), `force` (see Force the state).\
+A recurring scheduler is a single line: `every 60 from 06:00 to 20:00 pulse 10 days 135`.
 
 ### Conditions
-For each scheduler, you can add a condition that will be checked.
-If the condition is 'true' the action will be performed and (obviously) it won't be executed if the condition is 'false'.
-The condition is a template expression you can add to the "template" field.
-If the field is empty, no check will be performed and the action will always be executed. \
-The template expression **must return a boolean** ('True' or 'False'). Be sure to "convert" switches, lights, and any other entity states to boolean. \
-It is strongly advised to set a default with `replace("unavailable", "true")` or `replace("unavailable", "false")` to avoid errors in case the entity becomes unavailable. \
-A few examples:
-``` 
-{{  states('switch.my_switch') | replace("unavailable", "false") | bool }}
-{{  not states('light.my_light') | replace("unavailable", "false") | bool }}
-{{  states('sensor.room_temperature') | replace("unavailable", "22") | float > 23.5   }}
-{{  is_state('person.my_kid', 'not_home') | replace("unavailable", "true") | bool  }}
-{{  states('sensor.room_temperature') | replace("unavailable", "22") | float > 23.5
-      and is_state('sun.sun', 'above_horizon') | replace("unavailable", "true") | bool  }}
-``` 
-If the template returns '*on*', '*open*', '*home*', '*armed*', '*1*', and so on,  it will all be treated as 'False'. \
-If the template expression has syntax errors it will be considered 'false', and it will be reported in the addon log.\
-Use the template render utility in Developer Tools to test the condition before putting it into the scheduler.
+Every scheduler can have a condition, a template checked at the time of each event.
+If the field is empty, the events always run.\
+Each event runs when the condition is true (the usual case) or, if you choose so, when it is false: this way you can have different times depending on the condition.\
+The template **must render True or False**, so convert the states to booleans. A few examples:
+```
+{{ states('switch.my_switch') | bool }}
+{{ not states('light.my_light') | bool }}
+{{ states('binary_sensor.workday') | bool }}
+{{ states('sensor.room_temperature') | float > 23.5 }}
+{{ is_state('person.my_kid', 'not_home') }}
+```
+A template with an error is treated as false and the error is written in the log.\
+Use the **Test condition** button in the editor to check it before saving.
 
-### Failure notification 
-If a schedule is not able to execute the action, it can send you a notification, using one of the notifiers available in your setup. You can activate it in the addon configuration by selecting a notifier from the **notify on error** dropdown, otherwise you must select the entry "*disabled*". Choose the native notifier "*persistent_notification*" to receive the  message in the frontend. 
-This addon does not allow the addition or configuration of a notifier. This operation must be performed in Home Assistant. More info here: https://www.home-assistant.io/integrations/notify/
+### Force the state
+An event can **force its state until the next event** of the same scheduler: tick *Force this state until the next event* when you add it (a lock icon marks it).\
+Every minute SimpleScheduler checks the entities and, if one is not in the requested state, sends the action again with its extra settings.\
+For example: the scheduler turns on a light at 16:30 (forced) and turns it off at 18:00 (not forced). If you turn the light off at 17:04, it is turned on again within a minute. If you turn it on at 20:00, it stays on.
+- The forced period ends at the next event in the calendar, even on the next day and even if that event doesn't run because of the condition.
+- If the scheduler has a condition, it is checked every minute: when it no longer matches, the event is not forced any more until the next event.
+- Only on/off (open/closed, or the mode of a climate) is checked: you can still change the brightness or the temperature by hand.
+- After 5 attempts on the same entity in the same period SimpleScheduler gives up, writes it in the log and sends a notification (if set in the options). This stops endless fights with another automation, or with an entity that doesn't respond.
+- If two schedulers force different states on the same entity, the most recent event wins, and the log says so.
+- Disabling the scheduler (also from its MQTT switch) suspends the forcing.
+- It works with lights, switches, input_booleans, fans, covers, valves, climates, humidifiers, media players and automations. A forced event doesn't use the retries: the check every minute does the same job.
+- In a recurring scheduler the option applies to the events of its action (the *on* events for *on* and *pulse*, the *off* events for *off*).
 
-### Frontend switch to enable/disable (with MQTT)
-If you want to enable/disable schedulers in the front end and/or automation, you can achieve that through MQTT.
-This feature is disabled by default because it requires a working MQTT server (broker) and Home Assistant MQTT integration.
-Take a look at the [MQTT.MD](https://github.com/arthurdent75/SimpleScheduler/blob/master/asset/MQTT.MD "MQTT.MD") file to know more. 
+### Groups
+Click **New group** to create a group, then drag the schedulers into it. A group can be collapsed, renamed and enabled or disabled as a whole (the switch acts on every scheduler in it). Deleting a group keeps its schedulers.
 
-### Retry on unavailable
-By default, SimpleScheduler will retry 3 times if an entity is unavailable. The first retry attempt happens after 5 seconds, then every minute. You can change the number of retries in the addon options. The valid range is 0 to 5.
+### Switches in Home Assistant (MQTT)
+If you want to enable and disable the schedulers from the Home Assistant frontend or from automations, turn on **Switches in Home Assistant** in the options: every scheduler gets a switch through MQTT discovery. Turning a switch off disables the scheduler, and the web page shows the change at once.\
+It needs an MQTT broker and the MQTT integration in Home Assistant.
+The broker is found automatically through the Supervisor (for example the Mosquitto broker add-on). To use a different one, set `mqtt_host`, `mqtt_port`, `mqtt_username` and `mqtt_password` in the add-on configuration. The settings are read every time MQTT starts: turn the option off and on to apply a change.\
+The switches keep the same entity_id they had in version 3.
 
-### Hidden scheduler details
-When you have a lot of schedulers the view can become messy. As a default, all the scheduler details are hidden, so you can have a clear look. 
-You can toggle the visibility with the *eye* icon near the scheduler name. 
-If you prefer to have the entire schedule always visible, you can easily achieve that by enabling **details_uncovered** in the addon configuration
+### Options
+Open them with the options icon at the top of the page.
+- **Retries when an entity doesn't respond**: after an action, SimpleScheduler checks the entity after 5 seconds and then every minute, sending the action again if needed (0 to 5 times, default 3). Each scheduler can turn the retries off. Scenes, scripts, automations, buttons, cameras and media players are never retried.
+- **Notify on error**: a notify service to call when an action fails.
+- **Always show details**: show the details of every scheduler in the list.
+- **Switches in Home Assistant**: see above.
+- **Theme**: automatic, light or dark (see below).
+- **Debug mode**: writes detailed lines to the log. Turn it off when you're done.
+- **Hidden entities**: entities you never want in the list, one pattern per line, with `*` as a wildcard (for example `switch.*_led`).
 
-### Dark theme 
-The addon switches to dark theme accordingly to your setup
+### Home Assistant offline
+If Home Assistant is not reachable when an event is due, the event waits and runs as soon as the connection comes back (the log says how late it ran).
 
-### Translation
-The default text language is English. There are very few words.
-If you want to translate them, you just need to take a look at the configuration section of the addon.
-Rewrite the words you would like to use in your language and restart the add-on.
-For the weekdays, as you can easily understand, only the first two characters are used.
+### Real-time interface
+The page receives every change as it happens (Server-Sent Events): a switch turned in Home Assistant, a change made in another browser, the connection to Home Assistant going up or down.
+
+### Theme
+Choose the theme in the options: **Automatic** (the default) follows the light or dark theme of your device, **Light** and **Dark** always use that theme.\
+If you used the dark theme in version 3, the import sets it to Dark.
 
 ### Two words about the stored data
-Every schedule (or row, if you prefer) is a JSON file stored in the `/share/simplescheduler` folder under the SAMBA share.
-This way the data can "survive" an addon upgrade or reinstallation.
-You can easily backup and restore them in case of failure. In the same way, you can (accidentally?) delete them. So be aware of that.
+Every scheduler is a JSON file in the `schedulers` folder of the add-on configuration (`addon_configs/<slug>_simplescheduler` in the Samba share). The same folder holds the layout (order and groups), the options, today's sun times and the log.
+This way the data survives an add-on upgrade or reinstallation, and you can back it up and restore it. In the same way, you can (accidentally?) delete it, so be aware of that.\
+Scheduler files edited by hand are noticed within a minute.
 
-### Log 
-The log file is stored in the same folder where the JSON files are stored `/share/simplescheduler`
-You can delete it if it becomes too large, but be sure to stop the addon first.
-You can enable a verbose log by checking the box **debug mode** in the addon configuration.
-When enabled, the log file can easily become very large, so be sure to keep the debug mode on only the required time.
+### Log
+Open it with the log icon at the top of the page: you can filter warnings and errors, search it and clear it. The file is `simplescheduler.log` in the same folder as the data; it rotates at 2 MB.
 
 ### Last but not least
 If you want to convince me to stay up at night to work on this, just <a target="_blank" href="https://www.paypal.com/donate/?hosted_button_id=8FN58C8SM9LLW">buy me a beer 🍺</a> \
