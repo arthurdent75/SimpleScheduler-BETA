@@ -28,23 +28,27 @@ In the list:
 - the switch on each row enables or disables the scheduler: a disabled scheduler stays there, but it is not executed until you enable it again;
 - the eye icon shows or hides the details of a scheduler;
 - double-click a row (or the pencil) to edit it;
-- **drag the rows** to sort them as you like.
+- **drag the rows** from the handle to sort them as you like.
 
 ### Supported entities
-light, switch, input_boolean, scene, script, automation, button, input_button, cover, valve, fan, climate, humidifier, vacuum, media_player, camera.
-
-What *on* and *off* do depends on the entity: covers and valves open and close, vacuums start and return home, scripts run and stop, buttons are pressed, scenes are activated (buttons and scenes have no *off*).
-
-### Times and extra settings
-- A time can be `07:30`, `sunrise` or `sunset`, with an offset in minutes: `sunrise+30`, `sunset-60`.
-- The *on* events can carry extra settings, depending on the entity:
-  - **lights**: brightness in percent or absolute (1–255), RGB color or color temperature in Kelvin
-  - **covers** and **valves**: position (%)
-  - **fans**: speed (%)
-  - **climates**: mode (heat, cool, heat/cool, auto, dry, fan only) and **temperature**, optionally *without turning it on*. The list shows the modes supported by the selected climates; setting a mode turns the climate on in that mode, so it can't be combined with *without turning it on*
-  - **humidifiers**: humidity (%)
-  - **scripts**: variables, as a JSON object
-- It's not mandatory to add both *on* and *off*: if you only want to turn off a light every day at 22:00, add just that event.
+| **Entity** | **ON action** | **OFF action** | **Extra features** |
+|:---|:---:|:---:|:-----|
+| light | ON | OFF | **Brightness (%)**<br>*e.g: set brightness to 30%* <br><br> **Brightness (absolute)**<br>*e.g: set absolute brightness to 200*<br> <br> **Color (hex)**<br>*e.g: set brightness to 75% and color to orange*<br><br> **Color temp. (&deg;K)**<br>*e.g: set brightness to 20% and color temperature to 4700&deg;K* <br> |
+| cover | OPEN | CLOSE | **Percent (%)**<br>*e.g: open cover to 50%*  |
+| fan | ON | OFF | **Percent (%)**<br>*e.g: Turn on fan at 25%*  |
+| valve | OPEN | CLOSE | **Position (%)**<br>*e.g: Open valve at 50%*  |
+| climate | ON | OFF | **Temperature**<br>*e.g: turn on the climate and set temperature to 22.5&deg;* <br><br> **Temperature Only**<br>*e.g: just set temperature to 20.7&deg;* <br><br> **Mode**<br>*e.g: cool, heat, dry, fan, etc.*  |
+| humidifier | ON | OFF | **Humidity (&deg;)**<br>*e.g: turn on the (de)humidifier and set the humidity to 55%*  |
+| switch | ON | OFF |  |
+| button | PRESS | - |  |
+| input_button | PRESS | - |  |
+| vacuum | START | HOME |  |
+| media_player | ON | OFF |  |
+| script | RUN | STOP |  **Parameters**<br>*send parameters (JSON) to the script*  |
+| scene | ON | - |  |
+| camera | ON | OFF |  |
+| automation | ENABLE | DISABLE |  |
+| input_boolean | ON | OFF |  |
 
 ### Editing as text
 The **As text** card shows the events as text (*Preview*), and you can edit them by hand (*Manual edit* > *Apply text*).\
@@ -58,7 +62,8 @@ on 14:00 67 Mcool T24
 on 16:30 1234567 B70 force
 ```
 Settings: `B30` brightness %, `BA200` absolute brightness, `C#FF9900` color, `K4700` color temperature, `P50` position, `F25` fan speed, `Mcool` climate mode (`heat`, `cool`, `heat_cool`, `auto`, `dry`, `fan_only`), `T21.5` temperature, `TO21.5` temperature only, `H55` humidity, `J{...}` script variables (always last), `if:false` (see Conditions), `force` (see Force the state).\
-A recurring scheduler is a single line: `every 60 from 06:00 to 20:00 pulse 10 days 135`.
+A recurring scheduler is a single line: `every 60 from 06:00 to 20:00 pulse 10 days 135`.\
+This is useful if you want to change only one event in a sequence or copy (all or just a part of)  the events to another scheduler.
 
 ### Conditions
 Every scheduler can have a condition, a template checked at the time of each event.
