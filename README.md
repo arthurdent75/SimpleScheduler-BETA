@@ -3,6 +3,12 @@
 A Home Assistant add-on to schedule switches, lights and other entities on a weekly basis, in a visual way and without coding.\
 You keep all the schedules in one place and add or change them in a few clicks, even from the mobile app.
 
+<img width="974" height="895" alt="image" src="https://github.com/user-attachments/assets/df05c07d-a485-4623-b07f-ab9044c706ce" />
+
+### Demo
+[Here](https://htmlpreview.github.io/?https://github.com/arthurdent75/SimpleScheduler-BETA/blob/main/demo/index.html) you can find a working simulation with the most common scenarios:
+
+
 ### Installation
 Add the repository and then the add-on by clicking on the badges:\
 [<img src="https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg">](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Farthurdent75%2FSimpleScheduler) \
@@ -131,5 +137,4 @@ Scheduler files edited by hand are noticed within a minute.
 Open it with the log icon at the top of the page: you can filter warnings and errors, search it and clear it. The file is `simplescheduler.log` in the same folder as the data; it rotates at 2 MB.
 
 ### Last but not least
-If you want to convince me to stay up at night to work on this, just <a target="_blank" href="https://www.paypal.com/donate/?hosted_button_id=8FN58C8SM9LLW">buy me a beer 🍺</a> \
-You may say that regular people need coffee to do that. Well, I'm not a regular person.
+Did SimpleScheduler save you hours of work and make your life with Home Assistant easier? If so, consider <a target="_blank" href="https://www.paypal.com/donate/?hosted_button_id=8FN58C8SM9LLW"> buying me a beer 🍺</a><br/>It's not about the money, it's about the kindness ❤️
