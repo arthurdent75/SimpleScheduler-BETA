@@ -3,8 +3,7 @@ name: Simple Scheduler (BETA)
 description: Simple timer on weekly base
 slug: simplescheduler
 url: https://github.com/arthurdent75/SimpleScheduler-BETA
-image: ghcr.io/arthurdent75/simplescheduler-beta:4.0.1  
-codenotary: notary@home-assistant.io
+image: ghcr.io/arthurdent75/simplescheduler-beta
 arch:
   - aarch64
   - amd64
@@ -17,7 +16,7 @@ panel_icon: mdi:calendar-clock
 services:
   - mqtt:need 
 map:
-  - addon_config:rw
+  - app_config:rw
   - share:rw
 options: {}
 schema:
