@@ -1,9 +1,9 @@
-version: "4.0.0"
+version: "4.0.1"
 name: Simple Scheduler (BETA)
 description: Simple timer on weekly base
 slug: simplescheduler
 url: https://github.com/arthurdent75/SimpleScheduler-BETA
-image: ghcr.io/arthurdent75/simplescheduler-beta  
+image: ghcr.io/arthurdent75/simplescheduler-beta:4.0.1  
 codenotary: notary@home-assistant.io
 arch:
   - aarch64
