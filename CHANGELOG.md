@@ -1,4 +1,4 @@
-**Version 4.0.0 (in development)**
+**Version 4.0 (in development)**
 - New web interface with a visual timeline for every scheduler, groups, drag & drop and a text editor for the events
 - New logic in the event engine
 - Data moved from /share/simplescheduler to the add-on configuration folder (addon_config); version 3 files are imported automatically at the first start
@@ -9,4 +9,4 @@
 - New per-event force option: the state is kept until the next event
 - Climate: new extra setting for the HVAC mode (heat, cool, dry, …), with the modes supported by the selected entity
 - Extra features are now entered via UI, no more letter code to remember
-
+- Added "test now" button
