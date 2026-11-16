@@ -1,3 +1,9 @@
+**Version 4.0.4 (in development)**
+- Fixed the log of random events: it showed the time of the rule instead of the minute drawn ("executing OFF at 16:39 (random 16:25 ±15)")
+- Fixed covers and valves that are still moving (opening/closing) after an event: they were seen in the wrong state and the command was sent again; now they are checked again when they stop, also for forced events
+- Fixed the "From" and "To" times of a recurring scheduler: typing them with the keyboard lost the field after the first digit; the preview is now updated when you leave the field
+- Fixed the entity list in the editor: it didn't close when clicking outside it
+
 **Version 4.0.3 (in development)**
 - New random time for the events of daily and weekly schedulers (fixed times, sunrise and sunset): a different minute every day inside a window of ±5…120 minutes, shown as a hatched area on the timelines (text editor: `R30`)
 - Random windows that overlap the next or previous event are refused, both in the editor and when saving

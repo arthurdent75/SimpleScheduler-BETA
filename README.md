@@ -123,7 +123,7 @@ The switches keep the same entity_id they had in version 3.
 
 ### Options
 Open them with the options icon at the top of the page.
-- **Retries when an entity doesn't respond**: after an action, SimpleScheduler checks the entity after 5 seconds and then every minute, sending the action again if needed (0 to 5 times, default 3). Each scheduler can turn the retries off. Scenes, scripts, automations, buttons, cameras and media players are never retried.
+- **Retries when an entity doesn't respond**: after an action, SimpleScheduler checks the entity after 5 seconds and then every minute, sending the action again if needed (0 to 5 times, default 3). A cover or valve that is still opening or closing is not counted as wrong: it is checked again when it stops (for up to 5 minutes). Each scheduler can turn the retries off. Scenes, scripts, automations, buttons, cameras and media players are never retried.
 - **Notify on error**: a notify service to call when an action fails.
 - **Always show details**: show the details of every scheduler in the list.
 - **Switches in Home Assistant**: see above.
