@@ -121,6 +121,10 @@ It needs an MQTT broker and the MQTT integration in Home Assistant.
 The broker is found automatically through the Supervisor (for example the Mosquitto broker add-on). To use a different one, set `mqtt_host`, `mqtt_port`, `mqtt_username` and `mqtt_password` in the add-on configuration. The settings are read every time MQTT starts: turn the option off and on to apply a change.\
 The switches keep the same entity_id they had in version 3.
 
+### Calendar view
+Open it with the calendar icon at the top of the page. It shows the events of all schedulers in a typical week, Monday to Sunday, like the week view of a calendar app. 
+
+
 ### Options
 Open them with the options icon at the top of the page.
 - **Retries when an entity doesn't respond**: after an action, SimpleScheduler checks the entity after 5 seconds and then every minute, sending the action again if needed (0 to 5 times, default 3). A cover or valve that is still opening or closing is not counted as wrong: it is checked again when it stops (for up to 5 minutes). Each scheduler can turn the retries off. Scenes, scripts, automations, buttons, cameras and media players are never retried.

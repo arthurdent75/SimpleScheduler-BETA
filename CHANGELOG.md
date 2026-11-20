@@ -1,3 +1,9 @@
+**Version 4.0.5 (in development)**
+- New calendar view (icon at the top of the page): the events of all schedulers in a typical week, Monday to Sunday, in the style of a calendar app, with a day view, filters (group, recurring, "if false" events, disabled schedulers) and the details of every event
+- Editor on a phone: the timelines use the whole width, the weekday names of the week view are smaller and turned sideways
+- Timelines: the hour labels and the event labels are spaced on the real width of the screen, so they no longer overlap; in the week view, events too close to show are grouped on the label before ("06:50 +2")
+
+
 **Version 4.0.4 (in development)**
 - Fixed the log of random events: it showed the time of the rule instead of the minute drawn ("executing OFF at 16:39 (random 16:25 ±15)")
 - Fixed covers and valves that are still moving (opening/closing) after an event: they were seen in the wrong state and the command was sent again; now they are checked again when they stop, also for forced events
