@@ -13,7 +13,7 @@
   const schedulers = new Map(S.schedulers.map(s => [s.id, s]));
   let logLines = DATA.log.slice();
 
-  const APP_VERSION = '4.0.3';
+  const APP_VERSION = '4.0.6';
   const VALID_DOMAINS = ['light','scene','switch','button','script','camera','climate','cover','vacuum','fan',
                          'humidifier','valve','automation','input_boolean','input_button','media_player'];
   const HVAC_MODES = ['heat','cool','heat_cool','auto','dry','fan_only'];

@@ -123,6 +123,7 @@ The switches keep the same entity_id they had in version 3.
 
 ### Calendar view
 Open it with the calendar icon at the top of the page. It shows the events of all schedulers in a typical week, Monday to Sunday, like the week view of a calendar app. 
+It opens with the whole day on the screen: zoom in by dragging the hour column, with Ctrl + mouse wheel or with a pinch on a phone.
 
 
 ### Options
