@@ -2,6 +2,7 @@
 - Calendar: vertical zoom. It opens with the whole day on the screen; drag the hour column up or down, use Ctrl + wheel or the zoom buttons on a computer, pinch with two fingers on a phone
 - Calendar: long periods become thin bars only when a day is too crowded to show them; a day with few events shows them as normal blocks
 - Calendar: fixed scrolling on a phone, which didn't work when the finger started on the grid
+- Calendar: fixed the top bar on narrow phones: the Day/Week buttons made the page wider than the screen
 
 **Version 4.0.5 (in development)**
 - New calendar view (icon at the top of the page): the events of all schedulers in a typical week, Monday to Sunday, in the style of a calendar app, with a day view, filters (group, recurring, "if false" events, disabled schedulers) and the details of every event
